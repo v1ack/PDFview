@@ -1,10 +1,14 @@
-var gridPage = document.getElementById("pdf-preview-list");
-var grid = null;
+var preview_page = document.getElementById("pdf-preview"),
+	pdf_page_picker = document.getElementById("page-number-picker"),
+	pdf_page_picker_widget = null;
+
+preview_page.addEventListener("pagebeforeshow", function() {
+	pdf_page_picker_widget = tau.widget.NumberPicker(pdf_page_picker);
+});
 
 var pdfjsLib = window['pdfjs-dist/build/pdf'];
 
 // The workerSrc property shall be specified.
-//pdfjsLib.GlobalWorkerOptions.workerSrc = '//mozilla.github.io/pdf.js/build/pdf.worker.js';
 pdfjsLib.GlobalWorkerOptions.workerSrc = 'lib/pdfjs/pdf.worker.js';
 
 var pdfDoc = null,
@@ -53,16 +57,16 @@ function renderPage(num) {
 }
 
 function renderPreviewPage(num) {
-    var c_canvas = document.getElementById('pdf' + num),
+    var c_canvas = document.getElementById('canvas-pdf-preview'),
         c_ctx = c_canvas.getContext('2d'),
-        c_scale = 0.2;
+        c_scale = 0.17;
     pageRendering = true;
     // Using promise to fetch the page
     pdfDoc.getPage(num).then(function(page) {
         var viewport = page.getViewport({
             scale: c_scale
         });
-        c_canvas.height = viewport.width;
+        c_canvas.height = viewport.height;
         c_canvas.width = viewport.width;
 
         // Render PDF page into canvas context
@@ -83,6 +87,7 @@ function renderPreviewPage(num) {
         });
     });
 }
+
 /**
  * If another page rendering in progress, waits until the rendering is
  * finised. Otherwise, executes rendering immediately.
@@ -119,18 +124,18 @@ function onNextPage() {
 }
 document.getElementById('next').addEventListener('click', onNextPage);
 
-function openPage(num){
-	pageNum=num;
+function openPage(){
+	pageNum=parseInt(pdf_page_picker.value);
 	tau.changePage('pdf');
-	renderPage(num);
+	renderPage(pageNum);
 }
 /**
  * Asynchronously downloads PDF. '/opt/usr/media/Documents/0.pdf'
  */
 function openDoc(name) {
     tau.openPopup('loading-popup');
-    if (grid != null){
-    	grid.destroy()
+    if (pdf_page_picker_widget != null){
+    	pdf_page_picker_widget.destroy();
     }
     setTimeout(function() {
         tizen.filesystem.resolve(
@@ -145,21 +150,29 @@ function openDoc(name) {
                             data: atob(base64)
                         }).promise.then(function(pdfDoc_) {
                             pdfDoc = pdfDoc_;
-
+                            pdf_page_picker.max = pdfDoc.numPages;
                             // Initial/first page rendering
-                            var s = '';
-                            for (var i = 1; i <= pdfDoc.numPages; i++) {
-                                s += '<li><a onclick="openPage('+i+')"><canvas id="pdf' + i + '" class="pdf-page"></canvas></a></li>';
-                            }
-                            document.getElementById('pdf-preview-list').innerHTML = s;
-                            tau.changePage('pdf-preview');
-                            grid = tau.widget.Grid(gridPage);
-                            grid.__proto__._onClick = function() {
-								
+                            var picker_val = pdf_page_picker.value,
+                            page_timeout = -1;
+                            function watchPage() {
+								if (picker_val != pdf_page_picker.value){
+									if (page_timeout !== -1){
+									clearTimeout(page_timeout);}
+									page_timeout = setTimeout(function() {
+										renderPreviewPage(parseInt(pdf_page_picker.value));
+									}, 400);
+									picker_val = pdf_page_picker.value;
+								}
 							}
-                            for (var i = 1; i <= pdfDoc.numPages; i++) {
-                                renderPreviewPage(i);
-                            }
+                            
+                            setInterval(watchPage, 100);
+                            tau.changePage('pdf-preview');
+                            preview_page.childNodes[5].removeChild(preview_page.childNodes[5].childNodes[3]);
+                            setTimeout(function() {
+                            	pdf_page_picker.parentElement.childNodes[0].click();
+							}, 300);
+                            
+                            renderPreviewPage(1);
                             document.getElementById('page_count').textContent = pdfDoc.numPages;
                         });
                     },
@@ -173,5 +186,5 @@ function openDoc(name) {
                 console.log("Error" + e.message);
             }, "r"
         );
-    }, 100);
+    }, 200);
 }
