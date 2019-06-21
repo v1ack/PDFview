@@ -29,7 +29,7 @@ function updateList() {
 	var l = document.getElementById('files-list');
 	var html = '';
 	for (var f in filesList){
-		html+= '<li class="li-has-multiline"><a onclick="openDoc(\'' + filesList[f].path + '\');">'+ filesList[f].name + '<span class="ui-li-sub-text li-text-sub">'+humanFileSize(filesList[f].size, false)+'</span></a></li>';
+		html+= '<li class="li-has-multiline"><a onclick="openDocFile(\'' + filesList[f].path + '\');">'+ filesList[f].name + '<span class="ui-li-sub-text li-text-sub">'+humanFileSize(filesList[f].size, false)+'</span></a></li>';
 	}
 	l.innerHTML = html;
 	tau.widget.Listview(l);

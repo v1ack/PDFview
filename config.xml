@@ -1,13 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<widget xmlns="http://www.w3.org/ns/widgets" xmlns:tizen="http://tizen.org/ns/widgets" id="http://yourdomain/PDFview" version="1.0.0" viewmodes="maximized">
+<widget xmlns="http://www.w3.org/ns/widgets" xmlns:tizen="http://tizen.org/ns/widgets" id="http://v1ack.github.io/PDFview" version="1.0.0" viewmodes="maximized">
     <tizen:application id="cFZhqBE7nw.PDFview" package="cFZhqBE7nw" required_version="2.3"/>
+    <author email="kirilkin12@gmail.com">vlack</author>
     <content src="index.html"/>
     <feature name="http://tizen.org/feature/screen.size.all"/>
     <icon src="icon.png"/>
     <name>PDFview</name>
-    <tizen:privilege name="http://tizen.org/privilege/application.launch"/>
-    <tizen:privilege name="http://tizen.org/privilege/content.read"/>
-    <tizen:privilege name="http://tizen.org/privilege/content.write"/>
     <tizen:privilege name="http://tizen.org/privilege/filesystem.read"/>
     <tizen:privilege name="http://tizen.org/privilege/filesystem.write"/>
     <tizen:profile name="wearable"/>

@@ -1,14 +1,14 @@
 var preview_page = document.getElementById("pdf-preview"),
-	pdf_page_picker = document.getElementById("page-number-picker"),
-	pdf_page_picker_widget = null;
+    pdf_page_picker = document.getElementById("page-number-picker"),
+    pdf_page_picker_widget = null;
 
 preview_page.addEventListener("pagebeforeshow", function() {
-	pdf_page_picker_widget = tau.widget.NumberPicker(pdf_page_picker);
+    pdf_page_picker_widget = tau.widget.NumberPicker(pdf_page_picker);
 });
 
-var pdfjsLib = window['pdfjs-dist/build/pdf'];
+var watch_page_interval = null;
 
-// The workerSrc property shall be specified.
+var pdfjsLib = window['pdfjs-dist/build/pdf'];
 pdfjsLib.GlobalWorkerOptions.workerSrc = 'lib/pdfjs/pdf.worker.js';
 
 var pdfDoc = null,
@@ -19,13 +19,8 @@ var pdfDoc = null,
     canvas = document.getElementById('the-canvas'),
     ctx = canvas.getContext('2d');
 
-/**
- * Get page info from document, resize canvas accordingly, and render page.
- * @param num Page number.
- */
 function renderPage(num) {
     pageRendering = true;
-    // Using promise to fetch the page
     pdfDoc.getPage(num).then(function(page) {
         var viewport = page.getViewport({
             scale: scale
@@ -33,26 +28,21 @@ function renderPage(num) {
         canvas.height = viewport.height;
         canvas.width = viewport.width;
 
-        // Render PDF page into canvas context
         var renderContext = {
             canvasContext: ctx,
             viewport: viewport
         };
         var renderTask = page.render(renderContext);
 
-        // Wait for rendering to finish
         renderTask.promise.then(function() {
             tau.closePopup()
             pageRendering = false;
             if (pageNumPending !== null) {
-                // New page rendering is pending
                 renderPage(pageNumPending);
                 pageNumPending = null;
             }
         });
     });
-
-    // Update page counters
     document.getElementById('page_num').textContent = num;
 }
 
@@ -61,7 +51,6 @@ function renderPreviewPage(num) {
         c_ctx = c_canvas.getContext('2d'),
         c_scale = 0.17;
     pageRendering = true;
-    // Using promise to fetch the page
     pdfDoc.getPage(num).then(function(page) {
         var viewport = page.getViewport({
             scale: c_scale
@@ -69,18 +58,15 @@ function renderPreviewPage(num) {
         c_canvas.height = viewport.height;
         c_canvas.width = viewport.width;
 
-        // Render PDF page into canvas context
         var renderTask = page.render({
             canvasContext: c_ctx,
             viewport: viewport
         });
 
-        // Wait for rendering to finish
         renderTask.promise.then(function() {
             tau.closePopup()
             pageRendering = false;
             if (pageNumPending !== null) {
-                // New page rendering is pending
                 renderPage(pageNumPending);
                 pageNumPending = null;
             }
@@ -88,10 +74,6 @@ function renderPreviewPage(num) {
     });
 }
 
-/**
- * If another page rendering in progress, waits until the rendering is
- * finised. Otherwise, executes rendering immediately.
- */
 function queueRenderPage(num) {
     if (pageRendering) {
         pageNumPending = num;
@@ -100,9 +82,6 @@ function queueRenderPage(num) {
     }
 }
 
-/**
- * Displays previous page.
- */
 function onPrevPage() {
     if (pageNum <= 1) {
         return;
@@ -112,9 +91,6 @@ function onPrevPage() {
 }
 document.getElementById('prev').addEventListener('click', onPrevPage);
 
-/**
- * Displays next page.
- */
 function onNextPage() {
     if (pageNum >= pdfDoc.numPages) {
         return;
@@ -124,57 +100,65 @@ function onNextPage() {
 }
 document.getElementById('next').addEventListener('click', onNextPage);
 
-function openPage(){
-	pageNum=parseInt(pdf_page_picker.value);
-	tau.changePage('pdf');
-	renderPage(pageNum);
-}
-/**
- * Asynchronously downloads PDF. '/opt/usr/media/Documents/0.pdf'
- */
-function openDoc(name) {
-    tau.openPopup('loading-popup');
-    if (pdf_page_picker_widget != null){
-    	pdf_page_picker_widget.destroy();
+function onBezelPageChange(e) {
+    if (e.detail.direction == 'CW') {
+        onNextPage();
+    } else if (e.detail.direction == 'CCW') {
+        onPrevPage();
     }
+}
+
+function openPage() {
+    pageNum = parseInt(pdf_page_picker.value);
+    tau.changePage('pdf');
+    renderPage(pageNum);
+    document.getElementsByTagName('meta')['viewport'].content = "width=device-width, initial-scale=1.0";
+    window.addEventListener("rotarydetent", onBezelPageChange);
+}
+
+function openPdf(pdfDoc_) {
+    pdfDoc = pdfDoc_;
+    pdf_page_picker.value = 1;
+    pdf_page_picker.max = pdfDoc.numPages;
+    var picker_val = pdf_page_picker.value,
+        page_timeout = -1;
+
+    function watchPage() {
+        if (picker_val != pdf_page_picker.value) {
+            if (page_timeout !== -1) {
+                clearTimeout(page_timeout);
+            }
+            page_timeout = setTimeout(function() {
+                renderPreviewPage(parseInt(pdf_page_picker.value));
+            }, 400);
+            picker_val = pdf_page_picker.value;
+        }
+    }
+
+    watch_page_interval = setInterval(watchPage, 100);
+    tau.changePage('pdf-preview');
+    preview_page.childNodes[5].removeChild(preview_page.childNodes[5].childNodes[3]);
+    setTimeout(function() {
+        pdf_page_picker.parentElement.childNodes[0].click();
+    }, 300);
+
+    renderPreviewPage(1);
+    document.getElementById('page_count').textContent = pdfDoc.numPages;
+}
+
+function openDocFile(name) {
+    tau.openPopup('loading-popup');
     setTimeout(function() {
         tizen.filesystem.resolve(
             name,
             function(doc) {
                 var documentpdf = doc;
-                console.log(documentpdf);
                 documentpdf.openStream('r',
                     function(fs) {
                         var base64 = fs.readBase64(documentpdf.fileSize);
                         pdfjsLib.getDocument({
                             data: atob(base64)
-                        }).promise.then(function(pdfDoc_) {
-                            pdfDoc = pdfDoc_;
-                            pdf_page_picker.max = pdfDoc.numPages;
-                            // Initial/first page rendering
-                            var picker_val = pdf_page_picker.value,
-                            page_timeout = -1;
-                            function watchPage() {
-								if (picker_val != pdf_page_picker.value){
-									if (page_timeout !== -1){
-									clearTimeout(page_timeout);}
-									page_timeout = setTimeout(function() {
-										renderPreviewPage(parseInt(pdf_page_picker.value));
-									}, 400);
-									picker_val = pdf_page_picker.value;
-								}
-							}
-                            
-                            setInterval(watchPage, 100);
-                            tau.changePage('pdf-preview');
-                            preview_page.childNodes[5].removeChild(preview_page.childNodes[5].childNodes[3]);
-                            setTimeout(function() {
-                            	pdf_page_picker.parentElement.childNodes[0].click();
-							}, 300);
-                            
-                            renderPreviewPage(1);
-                            document.getElementById('page_count').textContent = pdfDoc.numPages;
-                        });
+                        }).promise.then(openPdf);
                     },
                     function(e) {
                         console.log(e);
