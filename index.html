@@ -4,8 +4,7 @@
 <meta charset="utf-8" />
 <meta name="viewport"
 	content="width=device-width, initial-scale=1.0, user-scalable=no">
-<meta name="description"
-	content="Tizen Wearable PDF viewer by vlack" />
+<meta name="description" content="Tizen Wearable PDF viewer by vlack" />
 <title>PDFview</title>
 <link rel="stylesheet" type="text/css"
 	href="lib/tau/wearable/theme/changeable/tau.min.css" />
@@ -21,16 +20,30 @@
 	color: black;
 	background-color: white;
 }
-
-.pdf-page {
-	
-}
 </style>
 </head>
-
 <body>
 	<div id="main" class="ui-page">
-		<header class="ui-header ui-has-more">
+		<header class="ui-header">
+			<h2 class="ui-title">PDFview</h2>
+		</header>
+		<div class="ui-content">
+			<ul class="ui-listview" id="main-listview">
+				<li class="li-has-multiline"><a
+					onclick="tau.changePage('files-page');"> Open <span
+						class="ui-li-sub-text li-text-sub">From documents folder</span>
+				</a></li>
+				<li class="li-has-multiline"><a
+					onclick="tau.openPopup('help-popup');"> Help <span
+						class="ui-li-sub-text li-text-sub">App description</span>
+				</a></li>
+			</ul>
+		</div>
+		<script type="text/javascript">
+		</script>
+	</div>
+	<div id="files-page" class="ui-page">
+		<header class="ui-header">
 			<h2 class="ui-title">PDFview</h2>
 		</header>
 		<div class="ui-content">
@@ -40,7 +53,6 @@
 	</div>
 	<div id="pdf" class="ui-page">
 		<div style='background-color: white; overflow-y: overlay;'>
-			<script src="lib/pdfjs/pdf.js"></script>
 			<div>
 				<button id="prev" class="doc-arrow" style="text-align: right">&lt;</button>
 				<button id="next" class="doc-arrow" style="text-align: left">&gt;</button>
@@ -67,7 +79,8 @@
 			</div>
 		</div>
 		<footer class="ui-footer ui-bottom-button ui-fixed">
-			<button class="ui-btn ui-number-picker-set" onclick="openPage()">Open</button>
+			<button class="ui-btn ui-number-picker-set"
+				onclick="pdfView.openPage();">Open</button>
 		</footer>
 	</div>
 	<div id="loading-popup" class="ui-popup">
@@ -78,45 +91,20 @@
 			</div>
 		</div>
 	</div>
-
-	<script type="text/javascript">
-(function () {
-	window.addEventListener("tizenhwkey", function (ev) {
-		var activePopup = null,
-			page = null,
-			pageId = "";
-
-		if (ev.keyName === "back") {
-			activePopup = document.querySelector(".ui-popup-active");
-			page = document.getElementsByClassName("ui-page-active")[0];
-			pageId = page ? page.id : "";
-
-			if (pageId === "main" && !activePopup) {
-				try {
-					tizen.application.getCurrentApplication().exit();
-				} catch (ignore) {
-				}
-			} else {
-				if (pageId === "pdf"){
-					document.getElementsByTagName('meta')['viewport'].content = "width=device-width, initial-scale=1.0, user-scalable=no";
-					window.removeEventListener("rotarydetent", onBezelPageChange);
-				}
-				if (pageId === "pdf-preview"){
-					if (pdf_page_picker_widget != null){
-				    	pdf_page_picker_widget.destroy();
-				    }
-				    if (watch_page_interval){
-				    	clearInterval(watch_page_interval);
-				    }
-				}
-				window.history.back();
-			}
-		}
-	});
-}());
-</script>
+	<div id="help-popup" class="ui-popup">
+		<div class="ui-popup-content">
+			This app can open PDFs<br> You should send it manually to your
+			device to 'Documents' folder, and then you would be able to open it.
+			You can do it with Filesmaster or another app
+		</div>
+		<div class="ui-popup-footer ui-bottom-button">
+			<a id="help-popup-cancel" href="#" class="ui-btn" data-rel="back">OK</a>
+		</div>
+	</div>
+	<script type="text/javascript" src="app.js"></script>
 	<script type="text/javascript" src="lib/tau/wearable/js/tau.min.js"></script>
-	<script src="files.js"></script>
+	<script type="text/javascript" src="files.js"></script>
+	<script type="text/javascript" src="lib/pdfjs/pdf.js"></script>
 	<script type="text/javascript" src="pdfview.js"></script>
 </body>
 </html>
