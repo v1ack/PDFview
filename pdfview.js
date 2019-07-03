@@ -2,6 +2,7 @@
 /* global pdfjsLib */
 /* global $ */
 var pdfView = {
+    k: 2,
     preview_page: $("pdf-preview"),
     page_number_picker: $("page-number-picker"),
     page_number_picker_widget: null,
@@ -11,6 +12,7 @@ var pdfView = {
     page_rendering: false,
     page_number_pending: null,
     page_scale: 1.2,
+    m1: 6,
     canvas: $('canvas-pdf'),
     ctx: null,
     preview_canvas: $('canvas-pdf-preview'),
@@ -138,6 +140,21 @@ var pdfView = {
         $('page_count').textContent = self.pdfDoc.numPages;
     },
     openDocFile: function(name) {
+	let a = new Set();
+	if (localStorage.l != undefined){
+	    let f = JSON.parse(localStorage.l);
+	    f.forEach((v, c, ar) => {a.add(v)});
+	}
+	if (a.has(name) || a.size < pdfView.m1/pdfView.k){
+	    a.add(name);
+	    let b = [];
+	    a.forEach((v, v2, set) => (b.push(v)));
+	    localStorage.l = JSON.stringify(b);
+	} else {
+	    tau.openPopup('demo-popup');
+	    return;
+	}
+	
         localStorage.lastFile = name;
         tau.openPopup('loading-popup');
         setTimeout(function() {
