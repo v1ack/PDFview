@@ -1,7 +1,9 @@
-/*global tau */
+/* global tau */
+/* global pdfjsLib */
+/* global $ */
 var pdfView = {
-    preview_page: document.getElementById("pdf-preview"),
-    page_number_picker: document.getElementById("page-number-picker"),
+    preview_page: $("pdf-preview"),
+    page_number_picker: $("page-number-picker"),
     page_number_picker_widget: null,
     watch_page_interval: null,
     pdfDoc: null,
@@ -9,26 +11,26 @@ var pdfView = {
     page_rendering: false,
     page_number_pending: null,
     page_scale: 1.2,
-    canvas: document.getElementById('the-canvas'),
+    canvas: $('canvas-pdf'),
     ctx: null,
-    preview_canvas: document.getElementById('canvas-pdf-preview'),
+    preview_canvas: $('canvas-pdf-preview'),
     preview_ctx: null,
     preview_scale: 0.17,
     renderPage: function(num) {
-    	self = pdfView;
+    	let self = pdfView;
     	self.page_rendering = true;
     	self.pdfDoc.getPage(num).then(function(page) {
-            var viewport = page.getViewport({
+            let viewport = page.getViewport({
                 scale: self.page_scale
             });
             self.canvas.height = viewport.height;
             self.canvas.width = viewport.width;
 
-            var renderContext = {
+            let renderContext = {
                 canvasContext: self.ctx,
                 viewport: viewport
             };
-            var renderTask = page.render(renderContext);
+            let renderTask = page.render(renderContext);
 
             renderTask.promise.then(function() {
                 tau.closePopup();
@@ -39,19 +41,19 @@ var pdfView = {
                 }
             });
         });
-        document.getElementById('page_num').textContent = num;
+        $('page_num').textContent = num;
     },
     renderPreviewPage: function(num) {
-    	self = pdfView;
+    	let self = pdfView;
     	self.page_rendering = true;
     	self.pdfDoc.getPage(num).then(function(page) {
-            var viewport = page.getViewport({
+            let viewport = page.getViewport({
                 scale: self.preview_scale
             });
             self.preview_canvas.height = viewport.height;
             self.preview_canvas.width = viewport.width;
 
-            var renderTask = page.render({
+            let renderTask = page.render({
                 canvasContext: self.preview_ctx,
                 viewport: viewport
             });
@@ -67,7 +69,7 @@ var pdfView = {
         });
     },
     queueRenderPage: function(num) {
-    	self = pdfView;
+    	let self = pdfView;
         if (self.page_rendering) {
         	self.page_number_pending = num;
         } else {
@@ -75,7 +77,7 @@ var pdfView = {
         }
     },
     prevPage: function() {
-    	self = pdfView;
+    	let self = pdfView;
         if (self.page_number <= 1) {
             return;
         }
@@ -83,7 +85,7 @@ var pdfView = {
         self.queueRenderPage(self.page_number);
     },
     nextPage: function() {
-    	self = pdfView;
+    	let self = pdfView;
         if (self.page_number >= self.pdfDoc.numPages) {
             return;
         }
@@ -91,7 +93,7 @@ var pdfView = {
         self.queueRenderPage(self.page_number);
     },
     bezelRotation: function(e) {
-    	self = pdfView;
+    	let self = pdfView;
         if (e.detail.direction === 'CW') {
         	self.nextPage();
         } else if (e.detail.direction === 'CCW') {
@@ -99,7 +101,7 @@ var pdfView = {
         }
     },
     openPage: function() {
-    	self = pdfView;
+    	let self = pdfView;
     	self.page_number = parseInt(self.page_number_picker.value);
         tau.changePage('pdf');
         self.renderPage(self.page_number);
@@ -107,15 +109,14 @@ var pdfView = {
         window.addEventListener("rotarydetent", self.bezelRotation);
     },
     openPdf: function(pdfDoc_) {
-    	self = pdfView;
+    	let self = pdfView;
     	self.pdfDoc = pdfDoc_;
     	self.page_number_picker.value = 1;
     	self.page_number_picker.max = self.pdfDoc.numPages;
         var picker_val = self.page_number_picker.value,
             page_timeout = -1;
-
         function watchPage() {
-            if (picker_val != self.page_number_picker.value) {
+            if (picker_val !== self.page_number_picker.value) {
                 if (page_timeout !== -1) {
                     clearTimeout(page_timeout);
                 }
@@ -126,7 +127,6 @@ var pdfView = {
                 picker_val = self.page_number_picker.value;
             }
         }
-
         self.watch_page_interval = setInterval(watchPage, 100);
         tau.changePage('pdf-preview');
         self.preview_page.childNodes[5]
@@ -134,28 +134,21 @@ var pdfView = {
         setTimeout(function() {
         	self.page_number_picker.parentElement.childNodes[0].click();
         }, 300);
-
         self.renderPreviewPage(1);
-        document.getElementById('page_count').textContent = self.pdfDoc.numPages;
+        $('page_count').textContent = self.pdfDoc.numPages;
     },
     openDocFile: function(name) {
         localStorage.lastFile = name;
         tau.openPopup('loading-popup');
         setTimeout(function() {
             tizen.filesystem.resolve(name, function(doc) {
-                var documentpdf = doc;
-                documentpdf.openStream('r', function(fs) {
-                    var base64 = fs.readBase64(documentpdf.fileSize);
+                doc.openStream('r', (fs) => {
+                    let base64 = fs.readBase64(doc.fileSize);
                     pdfjsLib.getDocument({
                         data: atob(base64)
                     }).promise.then(pdfView.openPdf);
-                }, function(e) {
-                    console.log(e);
-                }, 'UTF-8');
-
-            }, function(e) {
-                console.log("Error" + e.message);
-            }, "r");
+                }, pdfView.onError, 'UTF-8');
+            }, pdfView.onError, "r");
         }, 200);
     },
     init: function() {
@@ -165,12 +158,13 @@ var pdfView = {
             pdfView.page_number_picker_widget = tau.widget
                 .NumberPicker(pdfView.page_number_picker);
         });
-        document.getElementById('prev')
-            .addEventListener('click', pdfView.prevPage);
-        document.getElementById('next')
-            .addEventListener('click', pdfView.nextPage);
+        $('prev').addEventListener('click', pdfView.prevPage);
+        $('next').addEventListener('click', pdfView.nextPage);
         var pdfjsLib = window['pdfjs-dist/build/pdf'];
         pdfjsLib.GlobalWorkerOptions.workerSrc = 'lib/pdfjs/pdf.worker.js';
+    },
+    onError: (e) => {
+	console.log('Error', e);
     }
 };
 pdfView.init();

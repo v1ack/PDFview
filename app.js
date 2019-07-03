@@ -2,16 +2,18 @@
 /* global files */
 /* global pdfView */
 // beforehide, beforeshow, hide, show
+function $(id){
+    return document.getElementById(id);
+}
 var mlv = null,
     flv = null;
 window.addEventListener('pageshow', function(ev) {
     let page = ev.target,
         pageId = page.id;
     if (pageId === 'main') {
-        main_listview = document.getElementById('main-listview');
+        let main_listview = $('main-listview');
         if (localStorage.lastFile) {
-            filename = localStorage.lastFile.split('/');
-            filename = filename[filename.length - 1];
+            let filename = localStorage.lastFile.split('/').pop();
             main_listview.innerHTML = '<li class="li-has-multiline"><a onclick="pdfView.openDocFile(\'' + localStorage.lastFile + '\');">' + filename + '<span class="ui-li-sub-text li-text-sub">Last file</span></a></li>' + main_listview.innerHTML;
         }
         mlv = tau.widget.Listview(main_listview);

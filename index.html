@@ -12,13 +12,17 @@
 	href="lib/tau/wearable/theme/changeable/tau.circle.min.css" />
 <style>
 .doc-arrow {
-	width: 49vw;
+	width: 48vw;
 	border: 0;
 	padding: 0 20px;
 	margin: 0;
 	height: 50px;
 	color: black;
 	background-color: white;
+}
+
+.sa-note {
+	display: none;
 }
 </style>
 </head>
@@ -61,7 +65,7 @@
 				</div>
 			</div>
 			<div style="overflow-x: overlay;">
-				<canvas id="the-canvas"></canvas>
+				<canvas id="canvas-pdf"></canvas>
 			</div>
 		</div>
 	</div>
@@ -83,6 +87,19 @@
 				onclick="pdfView.openPage();">Open</button>
 		</footer>
 	</div>
+	<div id="sa-files" class="ui-page">
+		<header class="ui-header">
+			<h2 class="ui-title">File Receiver</h2>
+		</header>
+		<div class="ui-content content-padding">
+			<div id="sa-file-content">
+				<progress max="100" value="0" id="sa-file-progress"></progress>
+				<div class="ui-progress-ratio" id="sa-file-ratio"></div>
+				<div class="ui-progress-proportion" id="sa-file-name"></div>
+				<button type="button" class="ui-btn" id="sa-file-button">Cancel</button>
+			</div>
+		</div>
+	</div>
 	<div id="loading-popup" class="ui-popup">
 		<div class="ui-popup-content">
 			<div class="small-processing-container" style="margin-top: 50px">
@@ -93,17 +110,64 @@
 	</div>
 	<div id="help-popup" class="ui-popup">
 		<div class="ui-popup-content">
-			This app can open PDFs<br> You should send it manually to your
-			device to 'Documents' folder, and then you would be able to open it.
-			You can do it with Filesmaster or another app
+			<button class="ui-btn"
+				onclick="openBrowserOnPhone('https://v1ack.github.io/pdfview')"
+				style="border: 3px green solid; border-radius: 50px; padding: 2px; margin-bottom: 10px;">Download
+				app</button>
+			This app can open PDFs<br> You can manually put PDF to
+			'Documents' folder, or send by special app
 		</div>
 		<div class="ui-popup-footer ui-bottom-button">
 			<a id="help-popup-cancel" href="#" class="ui-btn" data-rel="back">OK</a>
 		</div>
 	</div>
+	<div id="sa-toast" class="ui-popup ui-popup-toast">
+		<div class="ui-popup-content">
+			<!--SA Service Connection Errors-->
+			<div class="sa-note" id="msg-already_exist">The remote
+				Accessory Peer Agent already exists.</div>
+			<div class="sa-note" id="msg-network_error">The connection
+				failed due to a network error.</div>
+			<div class="sa-note" id="msg-device_unreachable">The remote
+				Accessory Peer Agent is unreachable or no longer available, perhaps
+				it has been powered off or the connectivity has been turned off.</div>
+			<div class="sa-note" id="msg-invalid_peeragent">The SAPeerAgent
+				object is invalid.</div>
+			<div class="sa-note" id="msg-peeragent_no_response">The remote
+				Accessory Peer Agent timedout.</div>
+			<div class="sa-note" id="msg-peeragent_rejected">Accessory Peer
+				Agent rejected the request.</div>
+			<div class="sa-note" id="msg-error_reflection_exception">The
+				framework failed to construct an SASocket object.</div>
+
+			<!--SA File Receive Errors-->
+			<div class="sa-note" id="msg-file_io">The file write request
+				failed.</div>
+			<div class="sa-note" id="msg-peer_channel_io">The remote peer
+				is not reachable.</div>
+			<div class="sa-note" id="msg-peer_conn_lost">The connection to
+				the remote peer is lost during the file transfer.</div>
+			<div class="sa-note" id="msg-peer_no_response">The remote peer
+				did not respond.</div>
+			<div class="sa-note" id="msg-peer_rejected">The remote peer
+				rejected/cancelled the file request.</div>
+			<div class="sa-note" id="msg-space_not_available">The receiver
+				device does not have enough free space available.</div>
+
+			<div class="sa-note" id="msg-unknown_error">Unknown error
+				occurred.</div>
+
+			<!--SA Messages-->
+			<div class="sa-note" id="msg-onconnect">File transfer
+				connection established.</div>
+			<div class="sa-note" id="msg-oncomplete">File transfer ended
+				successful.</div>
+		</div>
+	</div>
 	<script type="text/javascript" src="app.js"></script>
 	<script type="text/javascript" src="lib/tau/wearable/js/tau.min.js"></script>
 	<script type="text/javascript" src="files.js"></script>
+	<script type="text/javascript" src="receiver.js"></script>
 	<script type="text/javascript" src="lib/pdfjs/pdf.js"></script>
 	<script type="text/javascript" src="pdfview.js"></script>
 </body>

@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<resources>
+	<application name="FileTransferSender">
+		<serviceProfile
+				autoLaunchAppId="cFZhqBE7nw.PDFview"
+				id="/sample/filetransfer"
+				name="FileTransferSender"
+				role="provider"
+				version="1.0">
+			<supportedTransports>
+				<transport type="TRANSPORT_BT"/>
+                <transport type="TRANSPORT_WIFI"/>
+			</supportedTransports>
+			<serviceChannel
+				id="108"
+				dataRate="low"
+				priority="low"
+				reliability="enable">
+			</serviceChannel>
+		</serviceProfile>
+	</application>
+</resources>
