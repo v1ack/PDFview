@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <resources>
-	<application name="FileTransferSender">
+	<application name="PDFview">
 		<serviceProfile
 				autoLaunchAppId="cFZhqBE7nw.PDFview"
-				id="/sample/filetransfer"
-				name="FileTransferSender"
+				id="/pdfview/filetransfer"
+				name="PDFview"
 				role="provider"
 				version="1.0">
 			<supportedTransports>
