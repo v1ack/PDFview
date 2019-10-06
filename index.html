@@ -18,15 +18,43 @@
             color: black;
             background-color: white;
         }
-
+        
         .sa-note {
             display: none;
         }
-
+        
         .invisible {
             opacity: 0;
         }
-
+        
+        .ui-more-delete::after {
+            height: 2.25rem!important;
+            width: 2.25rem!important;
+            -webkit-mask-box-image-source: url(res/b_more_option_delete_icon.png)!important;
+        }
+        /* .more-option-icon::before {
+            position: absolute;
+            content: "";
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            -webkit-mask-size: 100% 100%;
+            mask-size: 100% 100%;
+            background-color: rgba(15, 15, 15, 1);
+            -webkit-mask-repeat: no-repeat;
+            mask-repeat: no-repeat;
+        }
+        
+        .delete-icon::before {
+            -webkit-mask-image: url(./res/b_more_option_delete_icon.png);
+            mask-image: url(./res/b_more_option_delete_icon.png);
+        }
+        
+        .info-icon::before {
+            -webkit-mask-image: url(./res/b_more_option_delete_icon.png);
+            mask-image: url(./res/b_more_option_delete_icon.png);
+        } */
     </style>
 </head>
 
@@ -51,9 +79,16 @@
             <h2 class="ui-title">PDFview</h2>
         </header>
         <div class="ui-content">
+            <button type="button" class="ui-more ui-more-delete" style="z-index: 1;">Delete</button>
             <ul class="ui-listview invisible" id="files-list">
             </ul>
         </div>
+        <!-- <div id="moreoptionsPopupCircle" class="ui-popup ui-popup-more-options" data-overlay="false">
+            <div id="selector" class="ui-selector">
+                <div class="ui-item more-option-icon delete-icon" data-title="Delete"></div>
+                <div class="ui-item more-option-icon info-icon" data-title="Info"></div>
+            </div>
+        </div> -->
     </div>
     <div id="pdf" class="ui-page">
         <div style='background-color: white; overflow-y: overlay;'>
@@ -105,9 +140,8 @@
     </div>
     <div id="help-popup" class="ui-popup">
         <div class="ui-popup-content">
-            <button class="ui-btn" onclick="openBrowserOnPhone('https://v1ack.github.io/pdfview')" style="border: 3px green solid; border-radius: 50px; padding: 2px; margin-bottom: 10px;">Download app</button>
-            This app can open PDFs<br> You can manually put PDF to
-            'Documents' folder, or send by special app
+            <button class="ui-btn" onclick="openBrowserOnPhone('https://v1ack.github.io/pdfview')" style="border: 3px green solid; border-radius: 50px; padding: 2px; margin-bottom: 10px;">Download app</button> This app can open PDFs<br> You can manually
+            put PDF to 'Documents' folder, or send by special app
         </div>
         <div class="ui-popup-footer ui-bottom-button">
             <a id="help-popup-cancel" href="#" class="ui-btn" data-rel="back">OK</a>
@@ -115,8 +149,7 @@
     </div>
     <div id="demo-popup" class="ui-popup">
         <div class="ui-popup-content">
-            You using demo app, so you can open only 3 files<br>
-            You can buy full version in store
+            You using demo app, so you can open only 3 files<br> You can buy full version in store
         </div>
         <div class="ui-popup-footer ui-bottom-button">
             <a id="help-popup-cancel" href="#" class="ui-btn" data-rel="back">OK</a>
@@ -147,13 +180,12 @@
             <div class="sa-note" id="msg-oncomplete">File transfer ended successful.</div>
         </div>
     </div>
-    <script type="text/javascript" src="app.js"></script>
+    <script type="text/javascript" src="a.js"></script>
     <script type="text/javascript" src="lib/tau/wearable/js/tau.min.js"></script>
     <script type="text/javascript" src="lib/pdfjs/pdf.js"></script>
     <script type="text/javascript">
         var pdfjsLib = window['pdfjs-dist/build/pdf'];
         pdfjsLib.GlobalWorkerOptions.workerSrc = 'lib/pdfjs/pdf.worker.js';
-
     </script>
 </body>
 

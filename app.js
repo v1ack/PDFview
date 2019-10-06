@@ -1,6 +1,6 @@
 /* global tau, tizen, webapis */
 /* global pdfjsLib */
-/* global document, console, window, clearTimeout, setTimeout, localStorage, setInterval, clearInterval, alert, atob */
+/* global document, console, window, clearTimeout, setTimeout, localStorage, setInterval, clearInterval, alert */
 "use strict";
 var $ = (id) => document.getElementById(id);
 var mlv = null,
@@ -41,7 +41,7 @@ function scanFiles() {
             return bytes.toFixed(1) + ' ' + units[u];
         };
     tizen.filesystem.resolve(defaultDir,
-        function (dir) {
+        function(dir) {
             dir.listFiles((list) => {
                 let filesList = [];
                 for (let f of list) {
@@ -79,21 +79,21 @@ var pdfView = {
         ctx: null
     },
     k: 2,
-    preview_page: $("pdf-preview"),
-    page_number_picker: $("page-number-picker"),
-    page_number_picker_widget: null,
-    watch_page_interval: null,
+    previewPage: $("pdf-preview"),
+    pageNumberPicker: $("page-number-picker"),
+    pageNumberPickerWidget: null,
+    watchPageInterval: null,
     pdfDoc: null,
-    page_number: 1,
-    page_rendering: false,
-    page_number_pending: null,
+    pageNumber: 1,
+    pageRendering: false,
+    pageNumberPending: null,
     m1: 6,
     /**
      * Rendering page
      * @param {int} page number
      * @param {boolean} if true for preview, else for page
      */
-    renderPage: function (num, preview) {
+    renderPage: function(num, preview) {
         let self = pdfView,
             pageData;
         if (preview) {
@@ -101,8 +101,8 @@ var pdfView = {
         } else {
             pageData = self.page;
         }
-        self.page_rendering = true;
-        self.pdfDoc.getPage(num).then(function (page) {
+        self.pageRendering = true;
+        self.pdfDoc.getPage(num).then(function(page) {
             let viewport = page.getViewport({
                 scale: pageData.scale
             });
@@ -115,42 +115,42 @@ var pdfView = {
             };
             let renderTask = page.render(renderContext);
 
-            renderTask.promise.then(function () {
+            renderTask.promise.then(function() {
                 tau.closePopup();
-                self.page_rendering = false;
-                if (self.page_number_pending !== null) {
-                    self.renderPage(self.page_number_pending, preview);
-                    self.page_number_pending = null;
+                self.pageRendering = false;
+                if (self.pageNumberPending !== null) {
+                    self.renderPage(self.pageNumberPending, preview);
+                    self.pageNumberPending = null;
                 }
             });
         });
         $('page_num').textContent = num;
     },
-    queueRenderPage: function (num, preview) {
+    queueRenderPage: function(num, preview) {
         let self = pdfView;
-        if (self.page_rendering) {
-            self.page_number_pending = num;
+        if (self.pageRendering) {
+            self.pageNumberPending = num;
         } else {
             self.renderPage(num, preview);
         }
     },
-    prevPage: function () {
+    prevPage: function() {
         let self = pdfView;
-        if (self.page_number <= 1) {
+        if (self.pageNumber <= 1) {
             return;
         }
-        self.page_number--;
-        self.queueRenderPage(self.page_number);
+        self.pageNumber--;
+        self.queueRenderPage(self.pageNumber);
     },
-    nextPage: function () {
+    nextPage: function() {
         let self = pdfView;
-        if (self.page_number >= self.pdfDoc.numPages) {
+        if (self.pageNumber >= self.pdfDoc.numPages) {
             return;
         }
-        self.page_number++;
-        self.queueRenderPage(self.page_number);
+        self.pageNumber++;
+        self.queueRenderPage(self.pageNumber);
     },
-    bezelRotation: function (e) {
+    bezelRotation: function(e) {
         let self = pdfView;
         if (e.detail.direction === 'CW') {
             self.nextPage();
@@ -161,11 +161,11 @@ var pdfView = {
     /**
      * Opens page and sets event listener on bezel
      */
-    openPage: function () {
+    openPage: function() {
         let self = pdfView;
-        self.page_number = parseInt(self.page_number_picker.value);
+        self.pageNumber = parseInt(self.pageNumberPicker.value);
         tau.changePage('pdf');
-        self.renderPage(self.page_number);
+        self.renderPage(self.pageNumber);
         document.getElementsByTagName('meta').viewport.content = "width=device-width, initial-scale=1.0";
         window.addEventListener("rotarydetent", self.bezelRotation);
     },
@@ -173,32 +173,32 @@ var pdfView = {
      * Sets preview
      * @param {pdfDoc} pdfjsLib.getDocument() result
      */
-    openPdf: function (pdfDoc_) {
+    openPdf: function(pdfDoc_) {
         let self = pdfView;
         self.pdfDoc = pdfDoc_;
-        self.page_number_picker.value = 1;
-        self.page_number_picker.max = self.pdfDoc.numPages;
-        var picker_val = self.page_number_picker.value,
-            page_timeout = -1;
+        self.pageNumberPicker.value = 1;
+        self.pageNumberPicker.max = self.pdfDoc.numPages;
+        var pickerValue = self.pageNumberPicker.value,
+            pageTimeout = -1;
 
         function watchPage() {
-            if (picker_val !== self.page_number_picker.value) {
-                if (page_timeout !== -1) {
-                    clearTimeout(page_timeout);
+            if (pickerValue !== self.pageNumberPicker.value) {
+                if (pageTimeout !== -1) {
+                    clearTimeout(pageTimeout);
                 }
-                page_timeout = setTimeout(
-                    function () {
-                        self.queueRenderPage(parseInt(self.page_number_picker.value), true);
+                pageTimeout = setTimeout(
+                    function() {
+                        self.queueRenderPage(parseInt(self.pageNumberPicker.value), true);
                     }, 400);
-                picker_val = self.page_number_picker.value;
+                pickerValue = self.pageNumberPicker.value;
             }
         }
-        self.watch_page_interval = setInterval(watchPage, 100);
+        self.watchPageInterval = setInterval(watchPage, 100);
         tau.changePage('pdf-preview');
-        self.preview_page.childNodes[5]
-            .removeChild(self.preview_page.childNodes[5].childNodes[3]);
-        setTimeout(function () {
-            self.page_number_picker.parentElement.childNodes[0].click();
+        self.previewPage.childNodes[5]
+            .removeChild(self.previewPage.childNodes[5].childNodes[3]);
+        setTimeout(function() {
+            self.pageNumberPicker.parentElement.childNodes[0].click();
         }, 300);
         self.renderPage(1, true);
         $('page_count').textContent = self.pdfDoc.numPages;
@@ -207,25 +207,30 @@ var pdfView = {
      * Reads file from storage, loads it to pdfjsLib, then pdfView.openPdf()
      * @param {String} path to file
      */
-    openDocFile: function (path) {
-        //		let a = new Set();
-        //		if (localStorage.l != undefined){
-        //		    let f = JSON.parse(localStorage.l);
-        //		    f.forEach((v, c, ar) => {a.add(v)});
-        //		}
-        //		if (a.has(name) || a.size < pdfView.m1/pdfView.k){
-        //		    a.add(name);
-        //		    let b = [];
-        //		    a.forEach((v, v2, set) => (b.push(v)));
-        //		    localStorage.l = JSON.stringify(b);
-        //		} else {
-        //		    tau.openPopup('demo-popup');
-        //		    return;
-        //		}
+    openDocFile: function(path) {
+        // let a = new Set();
+        // if (localStorage.l !== undefined) {
+        //     let f = JSON.parse(localStorage.l);
+        //     f.forEach((v, c, ar) => {
+        //         a.add(v);
+        //     });
+        // }
+        // if (a.has(path) || a.size < pdfView.m1 / pdfView.k) {
+        //     a.add(path);
+        //     let b = [];
+        //     a.forEach((v, v2, set) => (b.push(v)));
+        //     localStorage.l = JSON.stringify(b);
+        // } else {
+        //     tau.openPopup('demo-popup');
+        //     return;
+        // }
+        // ------------------------------------------------------------------
         localStorage.lastFile = path;
         tau.openPopup('loading-popup');
-        setTimeout(function () {
-            tizen.filesystem.resolve(path, function (doc) {
+        setTimeout(function() {
+            tizen.filesystem.resolve(path, function(doc) {
+                if (doc.fileSize > 10485760)
+                    alert('This file is big, it can cause error');
                 doc.openStream('r', (fs) => {
                     pdfjsLib.getDocument({
                         data: fs.readBytes(doc.fileSize)
@@ -234,11 +239,11 @@ var pdfView = {
             }, pdfView.onError, "r");
         }, 200);
     },
-    init: function () {
+    init: function() {
         this.page.ctx = this.page.canvas.getContext('2d');
         this.preview.ctx = this.preview.canvas.getContext('2d');
-        this.preview_page.addEventListener("pagebeforeshow", function () {
-            pdfView.page_number_picker_widget = tau.widget.NumberPicker(pdfView.page_number_picker);
+        this.previewPage.addEventListener("pagebeforeshow", function() {
+            pdfView.pageNumberPickerWidget = tau.widget.NumberPicker(pdfView.pageNumberPicker);
         });
         $('prev').addEventListener('click', pdfView.prevPage);
         $('next').addEventListener('click', pdfView.nextPage);
@@ -278,19 +283,19 @@ function SAServer() {
      * @onerror         {Function} onerror Method executed after socket connection failure with error code as argument.
      */
     function SAServerOpen(appName, onFileTransfer, onerror) {
-        webapis.sa.requestSAAgent(function (agents) {
+        webapis.sa.requestSAAgent(function(agents) {
             if (agents.length > 0) {
                 var SAAgent = agents[0];
                 SAAgent.setServiceConnectionListener({
-                    onrequest: function (peerAgent) {
+                    onrequest: function(peerAgent) {
                         if (peerAgent.appName === appName) {
                             SAAgent.acceptServiceConnectionRequest(peerAgent);
                         } else {
                             SAAgent.rejectServiceConnectionRequest(peerAgent);
                         }
                     },
-                    onconnect: function (socket) {
-                        socket.setSocketStatusListener(function (reason) {
+                    onconnect: function(socket) {
+                        socket.setSocketStatusListener(function(reason) {
                             socket.close();
                         });
                         showNote("onconnect");
@@ -313,14 +318,14 @@ function SAServer() {
             button = $("sa-file-button");
 
         SAFileTransfer.setFileReceiveListener({
-            onreceive: function (id, fileName) {
+            onreceive: function(id, fileName) {
                 progress.value = 0;
                 name.innerHTML = fileName;
                 ratio.innerHTML = "0%";
 
                 tau.changePage("sa-files");
 
-                button.onclick = function () {
+                button.onclick = function() {
                     try {
                         SAFileTransfer.cancelFile(id);
                         window.history.back();
@@ -336,11 +341,11 @@ function SAServer() {
                     showNote("unknown_error");
                 }
             },
-            onprogress: function (id, value) {
+            onprogress: function(id, value) {
                 progress.value = value;
                 ratio.innerHTML = value + "%";
             },
-            oncomplete: function (id, localPath) {
+            oncomplete: function(id, localPath) {
                 window.history.back();
                 showNote("oncomplete");
             },
@@ -365,8 +370,7 @@ function openBrowserOnPhone(url) {
                 "http://tizen.org/appcontrol/operation/default",
                 null,
                 null,
-                null,
-                [
+                null, [
                     new tizen.ApplicationControlData("msgId", ["mgr_install_host_app_req"]),
                     new tizen.ApplicationControlData("type", ["phone"]),
                     new tizen.ApplicationControlData("deeplink", [url])
@@ -382,27 +386,27 @@ function openBrowserOnPhone(url) {
 }
 
 // Listeners
-(function () {
+(function() {
     // beforehide, beforeshow, hide, show
-    window.addEventListener('pageshow', function (ev) {
+    window.addEventListener('pageshow', function(ev) {
         let page = ev.target,
             pageId = page.id;
         if (pageId === 'main') {
-            let main_listview = $('main-listview');
+            let mainListview = $('main-listview');
             if (localStorage.lastFile) {
                 if ($('last_file')) {
                     let a = $('last_file');
                     a.parentNode.removeChild(a);
                 }
                 let filename = localStorage.lastFile.split('/').pop();
-                main_listview.innerHTML = '<li class="li-has-multiline" id="last_file"><a onclick="' + openFunction(filename) + '(\'' + localStorage.lastFile + '\');">' + filename + '<span class="ui-li-sub-text li-text-sub">Last file</span></a></li>' + main_listview.innerHTML;
+                mainListview.innerHTML = '<li class="li-has-multiline" id="last_file"><a onclick="' + openFunction(filename) + '(\'' + localStorage.lastFile + '\');">' + filename + '<span class="ui-li-sub-text li-text-sub">Last file</span></a></li>' + mainListview.innerHTML;
             }
-            mlv = tau.widget.Listview(main_listview);
+            mlv = tau.widget.Listview(mainListview);
         } else if (pageId === 'files-page') {
             scanFiles();
         }
     });
-    window.addEventListener('pagehide', function (ev) {
+    window.addEventListener('pagehide', function(ev) {
         let page = ev.target,
             pageId = page.id;
         if (pageId === 'main') {
@@ -412,7 +416,7 @@ function openBrowserOnPhone(url) {
             flv = null;
         }
     });
-    window.addEventListener('tizenhwkey', function (ev) {
+    window.addEventListener('tizenhwkey', function(ev) {
         let activePopup = null,
             page = null,
             pageId = '';
@@ -432,16 +436,16 @@ function openBrowserOnPhone(url) {
                     window.removeEventListener('rotarydetent', pdfView.bezelRotation);
                 }
                 if (pageId === 'pdf-preview') {
-                    if (pdfView.page_number_picker_widget !== null) {
-                        var ph = function () {
-                            pdfView.page_number_picker_widget.destroy();
+                    if (pdfView.pageNumberPickerWidget !== null) {
+                        var ph = function() {
+                            pdfView.pageNumberPickerWidget.destroy();
                             window.removeEventListener('pagehide', ph);
                             ph = null;
                         };
                         window.addEventListener('pagehide', ph);
                     }
-                    if (pdfView.watch_page_interval) {
-                        clearInterval(pdfView.watch_page_interval);
+                    if (pdfView.watchPageInterval) {
+                        clearInterval(pdfView.watchPageInterval);
                     }
                     if (pdfView.pdfDoc) {
                         pdfView.pdfDoc.destroy();
@@ -454,4 +458,72 @@ function openBrowserOnPhone(url) {
     });
     pdfView.init();
     SAServer();
+}());
+
+(function() {
+    /**
+     * page - More option page element
+     * popup - More option popup element for rectangular devices
+     * handler - Element for opening more option popup
+     * popupCircle - More option popup element for circular devices
+     * elSelector - Selector element in the circular popup
+     * selector - TAU selector instance
+     */
+    var page = document.querySelector("#files-page"),
+        handler = page.querySelector(".ui-more"),
+        // popupCircle = page.querySelector("#moreoptionsPopupCircle"),
+        // elSelector = page.querySelector("#selector"),
+        // selector,
+        clickHandlerBound;
+
+    /**
+     * Click event handler for opening more option popup
+     */
+    function clickHandler() {
+        let filename = flv._items[flv._state.currentIndex].innerText.split("\n")[0];
+        let delete_ = confirm("Are you shure to delete " + filename + "?");
+        if (delete_) {
+            tizen.filesystem.resolve('documents', dir => dir.deleteFile('documents/' + filename))
+            flv.destroy();
+            flv = null;
+            scanFiles();
+        }
+        // tizen.filesystem.deleteFile("documents/" + filename);
+        // tau.openPopup(popupCircle);
+    }
+
+    /**
+     * pagebeforeshow event handler
+     * Do preparatory works and adds event listeners
+     */
+    page.addEventListener("pagebeforeshow", function() {
+        // let radius = window.innerHeight / 2 * 0.8;
+
+        clickHandlerBound = clickHandler.bind(null);
+        handler.addEventListener("click", clickHandlerBound);
+        // selector = tau.widget.Selector(elSelector, { itemRadius: radius });
+
+    });
+
+    /**
+     * pagebeforehide event handler
+     * Destroys and removes event listeners
+     */
+    page.addEventListener("pagebeforehide", function() {
+        handler.removeEventListener("click", clickHandlerBound);
+        // selector.destroy();
+    });
+
+    /**
+     * When user click the indicator of Selector, drawer will close.
+     */
+    // elSelector.addEventListener("click", function(event) {
+    //     var target = event.target;
+
+    //     // 'ui-selector-indicator' is default indicator class name of Selector component
+    //     if (target.classList.contains("ui-selector-indicator")) {
+    //         tau.closePopup(popupCircle);
+    //     }
+
+    // });
 }());
