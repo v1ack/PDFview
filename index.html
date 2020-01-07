@@ -69,6 +69,8 @@
                     </a></li>
                 <li class="li-has-multiline"><a onclick="tau.openPopup('help-popup');"> Help <span class="ui-li-sub-text li-text-sub">App description</span>
                     </a></li>
+                <li class="li-has-multiline"><a onclick="tau.changePage('settings-page');"> Settings <span class="ui-li-sub-text li-text-sub">Quality settings</span>
+                    </a></li>
             </ul>
         </div>
         <script type="text/javascript">
@@ -102,6 +104,15 @@
             </div>
         </div>
     </div>
+    <div id="settings-page" class="ui-page" data-enable-page-scroll="false">
+        <header class="ui-header ui-header-big">
+            <h2 class="ui-title">Settings</h2>
+        </header>
+        <div class="ui-content">
+            <label>Page render quality</label>
+            <input type="range" name="slider-1" id="slider-pdf-scale" value="6" min="0" max="10" />
+        </div>
+    </div>
     <div id="pdf-preview" class="ui-page" data-enable-page-scroll="false">
         <header class="ui-header ui-header-big">
             <h2 class="ui-title">Select page</h2>
@@ -109,7 +120,7 @@
         <div class="ui-content">
             <canvas id="canvas-pdf-preview" style="position: fixed; margin-left: 0px"></canvas>
             <div style="margin-left: -100px">
-                <label> Page <input type="number" max="3" min="1" step="1" value="1" id="page-number-picker" />
+                <label> Page <input type="number" max="1" min="1" step="1" value="1" id="page-number-picker" />
                 </label>
             </div>
         </div>
@@ -180,7 +191,7 @@
             <div class="sa-note" id="msg-oncomplete">File transfer ended successful.</div>
         </div>
     </div>
-    <script type="text/javascript" src="a.js"></script>
+    <script type="text/javascript" src="app.js"></script>
     <script type="text/javascript" src="lib/tau/wearable/js/tau.min.js"></script>
     <script type="text/javascript" src="lib/pdfjs/pdf.js"></script>
     <script type="text/javascript">

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<widget xmlns="http://www.w3.org/ns/widgets" xmlns:tizen="http://tizen.org/ns/widgets" id="http://v1ack.github.io/PDFview" version="1.0.2" height="360" width="360" viewmodes="fullscreen">
+<widget xmlns="http://www.w3.org/ns/widgets" xmlns:tizen="http://tizen.org/ns/widgets" id="http://v1ack.github.io/PDFview" version="1.0.3" height="360" width="360" viewmodes="fullscreen">
     <tizen:application id="cFZhqBE7nw.PDFview" package="cFZhqBE7nw" required_version="3.0"/>
     <author href="https://v1ack.github.io/pdfview" email="kirilkin12@gmail.com">vlack</author>
     <content src="index.html"/>

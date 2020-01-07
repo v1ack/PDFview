@@ -60,6 +60,9 @@ function scanFiles() {
                     let onClick = openFunction(file.name);
                     html += '<li class="li-has-multiline"><a onclick="' + onClick + '(\'' + file.path + '\');">' + file.name + '<span class="ui-li-sub-text li-text-sub">' + humanFileSize(file.size, false) + '</span></a></li>';
                 }
+                if (!filesList.length) {
+                    html = '<li class="li-has-multiline"><a>No files found<span class="ui-li-sub-text li-text-sub">See help section</span></a></li>';
+                }
                 l.innerHTML = html;
                 flv = tau.widget.Listview(l);
             }, onError);
@@ -195,11 +198,12 @@ var pdfView = {
         }
         self.watchPageInterval = setInterval(watchPage, 100);
         tau.changePage('pdf-preview');
-        self.previewPage.childNodes[5]
-            .removeChild(self.previewPage.childNodes[5].childNodes[3]);
-        setTimeout(function() {
-            self.pageNumberPicker.parentElement.childNodes[0].click();
-        }, 300);
+        document.querySelectorAll('.ui-number-picker-set')[1].style.display = 'none';
+        // self.previewPage.childNodes[5]
+        //     .removeChild(self.previewPage.childNodes[5].childNodes[3]);
+        // setTimeout(function() {
+        //     self.pageNumberPicker.parentElement.childNodes[0].click();
+        // }, 300);
         self.renderPage(1, true);
         $('page_count').textContent = self.pdfDoc.numPages;
     },
@@ -240,6 +244,7 @@ var pdfView = {
         }, 200);
     },
     init: function() {
+        this.page.scale = localStorage.pageScale || 1.2;
         this.page.ctx = this.page.canvas.getContext('2d');
         this.preview.ctx = this.preview.canvas.getContext('2d');
         this.previewPage.addEventListener("pagebeforeshow", function() {
@@ -526,4 +531,36 @@ function openBrowserOnPhone(url) {
     //     }
 
     // });
+}());
+
+const sliderChange = function(e) {
+    localStorage.pageScale = e.target.valueAsNumber * 0.15 + 0.6;
+    pdfView.page.scale = localStorage.pageScale;
+};
+$('slider-pdf-scale').addEventListener("change", sliderChange);
+
+(function() {
+    /**
+     * page - Slider page element
+     * elSlider - Slider element
+     * slider - Slider component
+     * pageBeforeShowHandler - pagebeforeshow event handler
+     * pageHideHandler - pagehide event handler
+     */
+    var page = document.getElementById("settings-page"),
+        elSlider = document.getElementById("slider-pdf-scale"),
+        slider,
+        pageBeforeShowHandler,
+        pageHideHandler;
+
+    pageBeforeShowHandler = function() {
+        slider = tau.widget.Slider(elSlider);
+    };
+
+    pageHideHandler = function() {
+        slider.destroy();
+    };
+
+    page.addEventListener("pagebeforeshow", pageBeforeShowHandler);
+    page.addEventListener("pagehide", pageHideHandler);
 }());
