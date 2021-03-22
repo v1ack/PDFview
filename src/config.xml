@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<widget xmlns="http://www.w3.org/ns/widgets" xmlns:tizen="http://tizen.org/ns/widgets" id="http://v1ack.github.io/PDFview" version="{{app_version}}" height="360" width="360" viewmodes="fullscreen">
+    <tizen:application id="{{app_id}}.PDFview" package="{{app_id}}" required_version="3.0"/>
+    <author href="https://v1ack.github.io/pdfview" email="kirilkin12@gmail.com">vlack</author>
+    <content src="index.html"/>
+    <feature name="http://tizen.org/feature/screen.shape.circle"/>
+    <feature name="http://tizen.org/feature/screen.size.normal.360.360"/>
+    <feature name="http://developer.samsung.com/tizen/feature/network.accessory_protocol"/>
+    <icon src="icon.png"/>
+    <tizen:metadata key="AccessoryServicesLocation" value="accessoryservices.xml"/>
+    <name>{{app_name}}</name>
+    <tizen:privilege name="http://developer.samsung.com/tizen/privilege/accessoryprotocol"/>
+    <tizen:privilege name="http://tizen.org/privilege/application.launch"/>
+    <tizen:privilege name="http://tizen.org/privilege/filesystem.read"/>
+    <tizen:privilege name="http://tizen.org/privilege/filesystem.write"/>
+    <tizen:profile name="wearable"/>
+    <tizen:setting background-support="disable" encryption="disable" hwkey-event="enable"/>
+</widget>

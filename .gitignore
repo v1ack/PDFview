@@ -1,4 +1,7 @@
-
 .settings/
 .sign/
 *.wgt
+node_modules/
+build/
+.idea/
+dist/
