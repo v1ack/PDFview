@@ -5,7 +5,7 @@ export const pages = {
   mainScreen: 4,
   help: 5,
   settings: 6,
-  openLastFile: 7,
+  // openLastFile: 7,
   message: 8,
   fileReceive: 9
 }
@@ -27,4 +27,9 @@ export const saMessages = {
   unknown_error: "Unknown error occurred.",
   onconnect: "File transfer connection established.",
   oncomplete: "File transfer ended successful."
+}
+
+export const defaultPage = {
+  pageId: pages.mainScreen,
+  options: {}
 }

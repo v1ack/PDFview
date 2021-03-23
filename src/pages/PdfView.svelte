@@ -9,6 +9,8 @@
   let canvas
   let canvasContext
   let pageScale = 1
+  let rendering = false
+  let renderTask
 
   onMount(() => {
     canvasContext = canvas.getContext("2d")
@@ -27,6 +29,10 @@
   }
 
   function renderPage(pageNum, pageScale) {
+    if (rendering)
+      renderTask.cancel()
+    rendering = true
+
     $docStore.getPage(pageNum).then(function(pdfPage) {
       const viewport = pdfPage.getViewport({scale: pageScale})
       canvas.width = viewport.width
@@ -34,11 +40,11 @@
       const ctx = canvas.getContext("2d")
 
       // TODO: очередь для рендера файлов
-      let renderTask = pdfPage.render({
+      renderTask = pdfPage.render({
         canvasContext: ctx,
         viewport
       })
-      // renderTask.promise.then(() => rendering = false)
+      renderTask.promise.then(() => rendering = false)
     })
   }
 
@@ -61,10 +67,14 @@
     <span>{currentPage}/{pagesCount}</span>
     <button on:click={towards} style="text-align: left;">&gt</button>
   </div>
-  <canvas bind:this={canvas} />
+  <canvas bind:this={canvas}></canvas>
 </div>
 
 <style>
+    canvas {
+        margin-top: 50px;
+    }
+
     .buttons-block {
         width: 360px;
         display: flex;

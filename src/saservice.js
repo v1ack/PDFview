@@ -11,15 +11,15 @@ export function SAServer() {
    */
   function onerror(error) {
     historyStore.goBack()
-    showNote(error)
+    showNote(error, false)
   }
 
   /**
    * Shows element, which contains message.
    * @id  {String} Element id.
    */
-  function showNote(id) {
-    historyStore.goTo(pages.message, {message: saMessages[id.toLocaleLowerCase()]})
+  function showNote(id, auto_close = true) {
+    historyStore.goTo(pages.message, {message: saMessages[id.toLocaleLowerCase()], auto_close})
   }
 
   /**

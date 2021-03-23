@@ -1,6 +1,6 @@
 <script>
   /* global tizen */
-  import {historyStore} from "../store"
+  import {configStore, historyStore} from "../store"
   import {pages} from "../constants"
   import Loader from "../components/Loader.svelte"
   import {fade} from "svelte/transition"
@@ -77,17 +77,33 @@
   }
 
   function click(e) {
-    // TODO: demo
-    // TODO: save as last
-    historyStore.goTo(pages.pdfPreview, {path: e.detail.path})
+    const path = e.detail.path
+    let process = true
+    configStore.update(prev => {
+      if (app_type === "demo") {
+        let openedFiles = JSON.parse(prev.files)
+        if (openedFiles.indexOf(path) > -1 || openedFiles.length < 3) {
+          if (openedFiles.indexOf(path) === -1)
+            openedFiles.push(path)
+        } else
+          process = false
+        return {...prev, lastFile: path, files: JSON.stringify(openedFiles)}
+      } else
+        return {...prev, lastFile: path}
+    })
+    if (process)
+      historyStore.goTo(pages.pdfPreview, {path})
+    else
+      historyStore.goTo(pages.message, {message: "You reach the limit of the demo version"})
   }
 
   function deleteFile() {
     let file = files[chosenFileIndex].path
     let delete_ = confirm("Are you shure to delete " + file + "?")
     if (delete_) {
-      tizen.filesystem.resolve("documents", dir => dir.deleteFile("documents/" + file))
+      tizen.filesystem.resolve("documents", dir => dir.deleteFile(file))
       // TODO: обновлять список после удаления файла
+      loadFiles()
     }
   }
 </script>
@@ -97,7 +113,7 @@
     <Loader color="rgb(20, 182, 255)" />
     <p>Loading</p>
   </div>
-{:then files}
+{:then files_}
   <List items={files} title="Open file" on:click={click} bind:chosen={chosenFileIndex} />
   <button class="trash" on:click={deleteFile}>🗑</button>
 {:catch e}

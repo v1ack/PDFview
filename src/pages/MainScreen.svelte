@@ -9,13 +9,17 @@
     {title: "Help", subtitle: "App description", pageId: pages.help}]
   if ($configStore.lastFile) {
     pagesList = [{
-      title: "Last file", subtitle: $configStore.lastFile, pageId: pages.openLastFile
+      title: "Last file",
+      subtitle: $configStore.lastFile,
+      pageId: pages.pdfPreview,
+      options: {path: $configStore.lastFile}
     }, ...pagesList]
   }
 
   function click(e) {
     const pageId = e.detail.pageId
-    historyStore.goTo(pageId)
+    const options = e.detail.options
+    historyStore.goTo(pageId, options)
   }
 </script>
 

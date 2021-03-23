@@ -19,14 +19,17 @@ let production = !process.env.ROLLUP_WATCH
 let app_type = process.env.APP_TYPE || "pro"
 let app_version = process.env.npm_package_version
 
+// TODO: set icons path
 let constants = {
   demo: {
     app_id: "pdfviewdem",
-    app_name: "Docs View demo"
+    app_name: "Docs View demo",
+    icon: "pdfviewdemo.png"
   },
   pro: {
     app_id: "docviewpro",
-    app_name: "Docs View"
+    app_name: "Docs View",
+    icon: "pdfviewpro.png"
   },
   demo_old: {
     app_id: "pdfviewdem"
@@ -62,7 +65,7 @@ function serve() {
 }
 
 function replaceInFiles(filename) {
-  fs.readFile("src/" + filename, "utf8", function(err, data) {
+  fs.readFile("src/files/" + filename, "utf8", function(err, data) {
     if (err) {
       return console.log(err)
     }
@@ -82,6 +85,7 @@ const copyToDist = () => ({
     copySync(pdfJsWorker, "build/pdf_worker.js")
     replaceInFiles("accessoryservices.xml")
     replaceInFiles("config.xml")
+    copySync("src/files/" + constants[app_type].icon, "build/icon.png")
   }
 })
 
@@ -100,6 +104,13 @@ export default {
     }
   },
   plugins: [
+    {
+      // provide node environment on the client
+      transform: (code) => ({
+        code: code.replace("is_dev", `${!production}`).replace("app_type", `"${app_type}"`),
+        map: {mappings: ""}
+      })
+    },
     svelte({
       preprocess: sveltePreprocess(),
       compilerOptions: {
@@ -113,13 +124,6 @@ export default {
     }),
     commonjs(),
     copyToDist(),
-    {
-      // provide node environment on the client
-      transform: (code) => ({
-        code: code.replace("is_dev", `${!production}`).replace("app_type", `${app_type}`),
-        map: {mappings: ""}
-      })
-    },
     !production && serve(),
     !production && livereload("build"),
     production && terser()

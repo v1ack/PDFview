@@ -1,11 +1,11 @@
 /* global tizen */
 import {writable} from "svelte/store"
-import {pages} from "./constants"
+import {defaultPage} from "./constants"
 
 
 function createHistoryStore() {
-  const history = [{pageId: pages.mainScreen, options: {}}]
-  const store = writable({pageId: pages.mainScreen, options: {}})
+  const history = [defaultPage]
+  const store = writable(defaultPage)
 
   function goTo(pageId, options = {}) {
     // let pageData = {pageId, options: {...options, direction: "forward"}}
@@ -60,7 +60,7 @@ function createDocStore() {
 }
 
 function createConfigStore() {
-  const store = writable({f: 0, lastFile: ""})
+  const store = writable({files: "[]", lastFile: ""})
 
   function loadFromLocalStorage() {
     store.update(s => {
@@ -76,8 +76,17 @@ function createConfigStore() {
     localStorage[key] = value
   }
 
+  function update(updater) {
+    store.update(prev => {
+      let newData = updater(prev)
+      for (let k in newData)
+        localStorage[k] = newData[k]
+      return newData
+    })
+  }
+
   loadFromLocalStorage()
-  return {subscribe: store.subscribe, set}
+  return {subscribe: store.subscribe, set, update}
 }
 
 export const historyStore = createHistoryStore()
