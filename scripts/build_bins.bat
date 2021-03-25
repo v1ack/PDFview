@@ -1,3 +1,5 @@
+@echo off
+call set APP_TYPE=pro
 echo ------- Clear build folder
 call rm build/* -rf
 echo ------- Build js package

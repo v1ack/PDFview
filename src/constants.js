@@ -5,7 +5,6 @@ export const pages = {
   mainScreen: 4,
   help: 5,
   settings: 6,
-  // openLastFile: 7,
   message: 8,
   fileReceive: 9
 }

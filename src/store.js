@@ -15,14 +15,15 @@ function createHistoryStore() {
   }
 
   function goBack() {
-    let pageData = history.pop()
+    history.pop()
+    let pageData = history[history.length - 1]
     if (pageData === undefined) {
       try {
         tizen.application.getCurrentApplication().exit()
       } catch (ignore) {
+        pageData = defaultPage
       }
     }
-    pageData = history[history.length - 1]
     // pageData.options = {...pageData.options, direction: "backward"}
     store.set(pageData)
   }

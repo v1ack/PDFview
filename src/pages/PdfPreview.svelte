@@ -59,7 +59,11 @@
   }
 
   onMount(async () => {
-    await loadFileByPath(options.path)
+    if ($docStore) {
+      items = [...Array($docStore.numPages).keys()].map(i => i + 1)
+      renderPreview(1)
+    } else
+      await loadFileByPath(options.path)
   })
 
   function back(e) {
@@ -75,7 +79,7 @@
       renderTask.cancel()
     rendering = true
 
-    pdfDoc.getPage(pageNum).then(function(pdfPage) {
+    $docStore.getPage(pageNum).then(function(pdfPage) {
       const viewport = pdfPage.getViewport({scale: 0.17})
       canvas.width = viewport.width
       canvas.height = viewport.height

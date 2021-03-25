@@ -5,6 +5,7 @@
   import Loader from "../components/Loader.svelte"
   import {fade} from "svelte/transition"
   import List from "../components/List.svelte"
+  import Button from "../components/Button.svelte"
 
   let chosenFileIndex = 0
   let files = []
@@ -102,7 +103,6 @@
     let delete_ = confirm("Are you shure to delete " + file + "?")
     if (delete_) {
       tizen.filesystem.resolve("documents", dir => dir.deleteFile(file))
-      // TODO: обновлять список после удаления файла
       loadFiles()
     }
   }
@@ -114,8 +114,15 @@
     <p>Loading</p>
   </div>
 {:then files_}
-  <List items={files} title="Open file" on:click={click} bind:chosen={chosenFileIndex} />
-  <button class="trash" on:click={deleteFile}>🗑</button>
+  {#if files.length}
+    <List items={files} title="Open file" on:click={click} bind:chosen={chosenFileIndex} />
+    <button class="trash" on:click={deleteFile}>🗑</button>
+  {:else}
+    <div class="loader" transition:fade>
+      <p>No files found</p>
+      <Button on:click={() => historyStore.goTo(pages.help)}>Open help</Button>
+    </div>
+  {/if}
 {:catch e}
   <p class="center">Error {e.message}</p>
 {/await}

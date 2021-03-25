@@ -27,13 +27,13 @@
   }
 </script>
 <div class="container">
-  <Button on:click={() => openBrowserOnPhone('https://v1ack.github.io/pdfview')}>
-    Download app
-  </Button>
   <div class="text">
     This app can open PDFs<br> You can manually
     put PDF to 'Documents' folder, or send by special app
   </div>
+  <Button on:click={() => openBrowserOnPhone('https://v1ack.github.io/pdfview')}>
+    Download app
+  </Button>
   <Button on:click={historyStore.goBack}>
     Ok
   </Button>

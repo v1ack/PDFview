@@ -17,7 +17,7 @@
   })
 
   function towards() {
-    if (currentPage < pagesCount - 1)
+    if (currentPage < pagesCount)
       currentPage += 1
     else currentPage = 1
   }

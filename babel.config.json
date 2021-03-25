@@ -1,0 +1,17 @@
+{
+  "presets": [
+    [
+      "@babel/preset-env",
+      {
+        "targets": {
+          "chrome": 50
+        },
+        "forceAllTransforms": true,
+        "modules": false
+      }
+    ]
+  ],
+  "generatorOpts": {
+    "compact": false
+  }
+}

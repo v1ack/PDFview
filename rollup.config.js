@@ -8,6 +8,7 @@ import css from "rollup-plugin-css-only"
 import fs from "fs"
 import {copySync} from "fs-extra"
 import path from "path"
+import babel from "@rollup/plugin-babel"
 
 const pdfJsWorker = path.resolve(__dirname, "node_modules/pdfjs-dist/es5/build/pdf.worker.min.js")
 const pdfJs = path.resolve(__dirname, "node_modules/pdfjs-dist/es5/build/pdf.min.js")
@@ -19,7 +20,6 @@ let production = !process.env.ROLLUP_WATCH
 let app_type = process.env.APP_TYPE || "pro"
 let app_version = process.env.npm_package_version
 
-// TODO: set icons path
 let constants = {
   demo: {
     app_id: "pdfviewdem",
@@ -124,6 +124,30 @@ export default {
     }),
     commonjs(),
     copyToDist(),
+    babel({
+      extensions: [".js", ".mjs", ".html", ".svelte"],
+      babelHelpers: "runtime",
+      exclude: ["node_modules/@babel/**", "node_modules/core-js/**"],
+      presets: [
+        [
+          "@babel/preset-env",
+          {
+            targets: "> 0.25%, not dead",
+            useBuiltIns: "usage",
+            corejs: 3
+          }
+        ]
+      ],
+      plugins: [
+        "@babel/plugin-syntax-dynamic-import",
+        [
+          "@babel/plugin-transform-runtime",
+          {
+            useESModules: false
+          }
+        ]
+      ]
+    }),
     !production && serve(),
     !production && livereload("build"),
     production && terser()

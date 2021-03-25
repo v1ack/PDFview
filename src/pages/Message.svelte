@@ -1,14 +1,20 @@
 <script>
   import {historyStore} from "../store"
   import Button from "../components/Button.svelte"
-  import {onMount} from "svelte"
+  import {onDestroy, onMount} from "svelte"
 
   export let options
   let containerNode
+  let closeTimeout
 
   onMount(() => {
     if (options.auto_close)
-      setTimeout(historyStore.goBack, 5000)
+      closeTimeout = setTimeout(historyStore.goBack, 5000)
+  })
+
+  onDestroy(() => {
+    if (closeTimeout)
+      clearTimeout(closeTimeout)
   })
 
   function bezelRotate(e) {

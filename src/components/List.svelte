@@ -1,6 +1,7 @@
 <script>
   import {slide} from "svelte/transition"
   import {createEventDispatcher} from "svelte"
+  import {scrollTo} from "../utils"
 
   export let title
   export let items
@@ -53,18 +54,18 @@
     if (scrollTimeout) clearTimeout(scrollTimeout)
     scrollTimeout = setTimeout(() => {
       let scroll = itemHeight * chosen
-      e.target.scrollTo(0, scroll)
+      scrollTo(containerNode, 0, scroll)
     }, 300)
   }
 
   function bezelRotate(e) {
     if (e.detail.direction === "CW" && chosen < items.length - 1) {
       chosen = chosen + 1
-      containerNode.scrollTo(0, itemHeight * chosen)
+      scrollTo(containerNode, 0, itemHeight * chosen)
     }
     if (e.detail.direction === "CCW" && chosen > 0) {
       chosen = chosen - 1
-      containerNode.scrollTo(0, itemHeight * chosen)
+      scrollTo(containerNode, 0, itemHeight * chosen)
     }
   }
 
