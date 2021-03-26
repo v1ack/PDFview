@@ -6,12 +6,13 @@
   import {fade} from "svelte/transition"
   import List from "../components/List.svelte"
   import Button from "../components/Button.svelte"
+  import {getViewPageId} from "../utils"
 
   let chosenFileIndex = 0
   let files = []
 
   const defaultDir = "documents"
-  const types = ["pdf"]
+  const types = ["pdf", "md", "txt"]
 
   function onError(error) {
     console.log("Error", error)
@@ -42,12 +43,12 @@
             subtitle: humanFileSize(23423523, false)
           }, {
             title: "A strange file with a too long name and o dont know how it can be that",
-            path: "coursework.pdf",
+            path: "coursework.txt",
             modified: "dsf",
             subtitle: humanFileSize(8949353, false)
           }, {
-            title: "Another file",
-            path: "coursework.pdf",
+            title: "Markdown file",
+            path: "coursework.md",
             modified: "dsf",
             subtitle: humanFileSize(2432, false)
           }]
@@ -92,9 +93,9 @@
       } else
         return {...prev, lastFile: path}
     })
-    if (process)
-      historyStore.goTo(pages.pdfPreview, {path})
-    else
+    if (process) {
+      historyStore.goTo(getViewPageId(path), {path})
+    } else
       historyStore.goTo(pages.message, {message: "You reach the limit of the demo version"})
   }
 

@@ -124,7 +124,7 @@ export default {
     }),
     commonjs(),
     copyToDist(),
-    babel({
+    production && babel({
       extensions: [".js", ".mjs", ".html", ".svelte"],
       babelHelpers: "runtime",
       exclude: ["node_modules/@babel/**", "node_modules/core-js/**"],

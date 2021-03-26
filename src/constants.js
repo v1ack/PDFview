@@ -6,7 +6,9 @@ export const pages = {
   help: 5,
   settings: 6,
   message: 8,
-  fileReceive: 9
+  fileReceive: 9,
+  mdView: 10,
+  txtView: 12
 }
 
 export const saMessages = {
