@@ -463,6 +463,11 @@ function openBrowserOnPhone(url) {
     });
     pdfView.init();
     SAServer();
+
+    if (!localStorage.new_app){
+        tau.changePage("update-popup");
+        localStorage.new_app = "true";
+    }
 }());
 
 (function() {
@@ -564,3 +569,4 @@ $('slider-pdf-scale').addEventListener("change", sliderChange);
     page.addEventListener("pagebeforeshow", pageBeforeShowHandler);
     page.addEventListener("pagehide", pageHideHandler);
 }());
+
