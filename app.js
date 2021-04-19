@@ -465,7 +465,9 @@ function openBrowserOnPhone(url) {
     SAServer();
 
     if (!localStorage.new_app){
+        setTimeout(function(){
         tau.changePage("update-popup");
+        }, 300);
         localStorage.new_app = "true";
     }
 }());
