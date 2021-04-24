@@ -1,6 +1,6 @@
 {
   "name": "pdfview",
-  "version": "1.1.0",
+  "version": "1.1.2",
   "description": "pdf view app for tizen",
   "main": "app.js",
   "scripts": {
@@ -25,6 +25,7 @@
     "@rollup/plugin-babel": "^5.3.0",
     "@rollup/plugin-commonjs": "^17.1.0",
     "@rollup/plugin-node-resolve": "^11.2.0",
+    "core-js": "^3.11.0",
     "fs-extra": "^9.1.0",
     "pdfjs-dist": "^2.6.347",
     "rollup": "^2.41.5",

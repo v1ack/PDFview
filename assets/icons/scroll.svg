@@ -1,0 +1,29 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 64 64">
+    <defs>
+        <clipPath id="clip-scroll_1">
+            <rect width="64" height="64"/>
+        </clipPath>
+    </defs>
+    <g id="scroll_1" data-name="scroll – 1" clip-path="url(#clip-scroll_1)">
+        <g id="Сгруппировать_21" data-name="Сгруппировать 21" transform="translate(-690.531 -103.703)">
+            <g id="Контур_19" data-name="Контур 19" transform="translate(602.175 103.965)" fill="none">
+                <path d="M99.984,0A4,4,0,0,0,96,3.984V59.755a4,4,0,0,0,3.984,3.984H139.82a4,4,0,0,0,3.984-3.984V15.935L127.869,0Z"
+                      stroke="none"/>
+                <path d="M 102 5.999996185302734 L 102 57.73828125 L 137.8037109375 57.73828125 L 137.8037109375 18.41985321044922 L 125.3838424682617 5.999996185302734 L 102 5.999996185302734 M 99.983642578125 -3.814697265625e-06 L 127.8691253662109 -3.814697265625e-06 L 143.8037109375 15.93456649780273 L 143.8037109375 59.75462341308594 C 143.8037109375 61.94564056396484 142.0110778808594 63.73828125 139.8200378417969 63.73828125 L 99.983642578125 63.73828125 C 97.79264831542969 63.73828125 96 61.94564056396484 96 59.75462341308594 L 96 3.983638763427734 C 96 1.792636871337891 97.79264831542969 -3.814697265625e-06 99.983642578125 -3.814697265625e-06 Z"
+                      stroke="none" fill="#fff"/>
+            </g>
+            <path id="Контур_20" data-name="Контур 20"
+                  d="M356.671,18.684h14.013L352,0V14.013A4.685,4.685,0,0,0,356.671,18.684Z"
+                  transform="translate(375.294 103.965)" fill="#fff"/>
+        </g>
+        <g id="Сгруппировать_15" data-name="Сгруппировать 15" transform="translate(0.506 -1.136)">
+            <path id="Контур_22" data-name="Контур 22" d="M0,0,8.522,9.183,16.988,0" transform="translate(22.5 39.319)"
+                  fill="none" stroke="#fff" stroke-linecap="round" stroke-linejoin="round" stroke-width="4"/>
+            <path id="Контур_23" data-name="Контур 23" d="M0,0,8.522,9.183,16.988,0"
+                  transform="translate(39.488 28.683) rotate(180)" fill="none" stroke="#fff" stroke-linecap="round"
+                  stroke-linejoin="round" stroke-width="4"/>
+            <path id="Контур_21" data-name="Контур 21" d="M0,0V26.337" transform="translate(30.994 21.198)" fill="none"
+                  stroke="#fff" stroke-width="4"/>
+        </g>
+    </g>
+</svg>

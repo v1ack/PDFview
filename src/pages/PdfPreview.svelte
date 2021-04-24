@@ -5,7 +5,7 @@
   import pdfjsLib from "pdfjs-dist/es5/build/pdf"
   import {onMount} from "svelte"
   import {fade} from "svelte/transition"
-  import {pages} from "../constants"
+  import {isDev, pages} from "../constants"
   import {docStore, historyStore} from "../store"
   import Loader from "../components/Loader.svelte"
 
@@ -44,7 +44,7 @@
   }
 
   async function loadFileByPath(path) {
-    if (is_dev) pdfDocFile = await getPdfDocFileDev(path)
+    if (isDev) pdfDocFile = await getPdfDocFileDev(path)
     else pdfDocFile = await getPdfDocFile(path)
 
     pdfDocFile.promise.then(pdf => {

@@ -1,6 +1,9 @@
 <script>
-  import {docStore} from "../store"
+  import {configStore, docStore} from "../store"
   import {onMount} from "svelte"
+  import InViewSettings from "../components/InViewSettings.svelte"
+  import {bezelActions} from "../constants"
+  import {bezelEventScroll} from "../utils"
 
   export let options
 
@@ -8,6 +11,7 @@
   let pagesCount = $docStore.numPages
   let canvas
   let canvasContext
+  let containerNode
   let pageScale = 1
   let rendering = false
   let renderTask
@@ -51,17 +55,48 @@
   $: renderPage(currentPage, pageScale)
 
   function bezelRotate(e) {
-    if (e.detail.direction === "CW" && pageScale < 2) {
-      pageScale += 0.2
-    }
-    if (e.detail.direction === "CCW" && pageScale > 0.6) {
-      pageScale -= 0.2
+    switch ($configStore.pdfAction) {
+      case bezelActions.scale: {
+        if (e.detail.direction === "CW" && pageScale < 2) {
+          pageScale += 0.2
+        }
+        if (e.detail.direction === "CCW" && pageScale > 0.6) {
+          pageScale -= 0.2
+        }
+        break
+      }
+      case bezelActions.changePage: {
+        if (e.detail.direction === "CW") towards()
+        if (e.detail.direction === "CCW") backwards()
+        break
+      }
+      case bezelActions.scroll: {
+        bezelEventScroll(containerNode, e)
+        break
+      }
     }
   }
+
+  const buttons = [{
+    id: bezelActions.scale,
+    label: "Scale",
+    image: "/icons/scale.svg"
+  }, {
+    id: bezelActions.scroll,
+    label: "Scroll",
+    image: "/icons/scroll.svg"
+  }, {
+    id: bezelActions.changePage,
+    label: "Page",
+    image: "/icons/change-page.svg"
+  }]
+
+  let chosenAction = $configStore.pdfAction
+  $: configStore.set("pdfAction", chosenAction)
 </script>
 
 <svelte:window on:rotarydetent={bezelRotate} />
-<div class="container">
+<div bind:this={containerNode} class="container">
   <div class="buttons-block">
     <button on:click={backwards} style="text-align: right;">&lt</button>
     <span>{currentPage}/{pagesCount}</span>
@@ -69,16 +104,15 @@
   </div>
   <canvas bind:this={canvas}></canvas>
 </div>
+<InViewSettings bind:current={chosenAction} {buttons} title="Action on bezel" />
 
 <style>
-    canvas {
-        margin-top: 50px;
-    }
-
     .buttons-block {
         width: 360px;
         display: flex;
-        position: fixed;
+        position: sticky;
+        top: 0;
+        left: 0;
     }
 
     .buttons-block button {
@@ -101,7 +135,9 @@
 
     .container {
         overflow: scroll;
+        scroll-behavior: smooth;
         height: inherit;
         width: inherit;
+        border-radius: 160px;
     }
 </style>

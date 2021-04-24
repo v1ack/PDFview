@@ -9,6 +9,13 @@ export function scrollTo(node, x, y) {
   }
 }
 
+export function bezelEventScroll(node, event) {
+  if (event.detail.direction === "CW" && node.scrollHeight - node.clientHeight > node.scrollTop - 1)
+    scrollTo(node, 0, node.scrollTop + 150)
+  if (event.detail.direction === "CCW" && node.scrollTop > 0)
+    scrollTo(node, 0, node.scrollTop - 150)
+}
+
 export function getViewPageId(path) {
   let extension = path.toLowerCase().split(".")
   extension = extension[extension.length - 1]
@@ -17,7 +24,7 @@ export function getViewPageId(path) {
       return pages.pdfPreview
     }
     case "md": {
-      return pages.mdView
+      return pages.txtView
     }
     case "txt": {
       return pages.txtView

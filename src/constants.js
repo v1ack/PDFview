@@ -1,3 +1,18 @@
+export const bezelActions = {
+  scale: "scale",
+  scroll: "scroll",
+  changePage: "changePage"
+}
+
+export const defaultConfigValues = {
+  files: "[]",
+  lastFile: "",
+  txtAction: bezelActions.scroll,
+  txtFontSize: "16",
+  txtTheme: "white",
+  pdfAction: bezelActions.scale
+}
+
 export const pages = {
   filesList: 1,
   pdfPreview: 2,
@@ -7,7 +22,6 @@ export const pages = {
   settings: 6,
   message: 8,
   fileReceive: 9,
-  mdView: 10,
   txtView: 12
 }
 
@@ -34,3 +48,5 @@ export const defaultPage = {
   pageId: pages.mainScreen,
   options: {}
 }
+
+export const isDev = is_dev

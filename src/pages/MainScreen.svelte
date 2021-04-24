@@ -10,6 +10,7 @@
     {title: "Help", subtitle: "App description", pageId: pages.help}]
   if ($configStore.lastFile) {
     let path = $configStore.lastFile
+    // TODO: проверять существует ли файл
     let filename = path.split("/")
     filename = filename[filename.length - 1]
     pagesList = [{
@@ -27,4 +28,4 @@
   }
 </script>
 
-<List height={360} items={pagesList} on:click={click} title="PDFview" />
+<List height={360} items={pagesList} on:click={click} title="app_name" />

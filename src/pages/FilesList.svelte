@@ -1,7 +1,7 @@
 <script>
   /* global tizen */
   import {configStore, historyStore} from "../store"
-  import {pages} from "../constants"
+  import {isDev, pages} from "../constants"
   import Loader from "../components/Loader.svelte"
   import {fade} from "svelte/transition"
   import List from "../components/List.svelte"
@@ -33,7 +33,7 @@
   }
 
   function loadFiles() {
-    if (is_dev)
+    if (isDev)
       return new Promise((resolve, reject) => {
         setTimeout(() => {
           let filesList = [{

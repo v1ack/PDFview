@@ -84,7 +84,8 @@
       <div class="title" style="color: #14b6ff">{title}</div>
     {/if}
   </div>
-  {#each items as item, i}
+  <!-- TODO: добавить id -->
+  {#each items as item, i (item.title || item)}
     <div
       on:click={()=>dispatch("click", item)}
       class:active={chosen === i}

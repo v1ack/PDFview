@@ -2,6 +2,7 @@
   import {historyStore} from "../store"
   import Button from "../components/Button.svelte"
   import {onDestroy, onMount} from "svelte"
+  import {bezelEventScroll} from "../utils"
 
   export let options
   let containerNode
@@ -16,18 +17,9 @@
     if (closeTimeout)
       clearTimeout(closeTimeout)
   })
-
-  function bezelRotate(e) {
-    if (e.detail.direction === "CW" && containerNode.scrollHeight - containerNode.clientHeight < containerNode.scrollTop) {
-      containerNode.scrollTo(0, containerNode.scrollTop + 150)
-    }
-    if (e.detail.direction === "CCW" && containerNode.scrollTop > 150) {
-      containerNode.scrollTo(0, containerNode.scrollTop - 150)
-    }
-  }
 </script>
 
-<svelte:window on:rotarydetent={bezelRotate} />
+<svelte:window on:rotarydetent={(e) => bezelEventScroll(containerNode, e)} />
 
 <div bind:this={containerNode} class="container">
   <div class="message">{options.message}</div>

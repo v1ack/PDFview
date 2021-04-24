@@ -107,7 +107,7 @@ export default {
     {
       // provide node environment on the client
       transform: (code) => ({
-        code: code.replace("is_dev", `${!production}`).replace("app_type", `"${app_type}"`),
+        code: code.replace("is_dev", `${!production}`).replace("app_type", `"${app_type}"`).replace("app_name", constants[app_type].app_name),
         map: {mappings: ""}
       })
     },
