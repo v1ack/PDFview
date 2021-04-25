@@ -6,6 +6,7 @@
   "scripts": {
     "dev": "rollup -c -w",
     "build": "rollup -c",
+    "format": "prettier -w src",
     "start": "sirv build"
   },
   "repository": {
@@ -28,6 +29,8 @@
     "core-js": "^3.11.0",
     "fs-extra": "^9.1.0",
     "pdfjs-dist": "^2.6.347",
+    "prettier": "^2.2.1",
+    "prettier-plugin-svelte": "^2.2.0",
     "rollup": "^2.41.5",
     "rollup-plugin-css-only": "^3.1.0",
     "rollup-plugin-livereload": "^2.0.0",

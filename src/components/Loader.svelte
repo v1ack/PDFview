@@ -1,11 +1,12 @@
 <script>
   export let color = "#FFF"
 </script>
+
 <div class="lds-ring" style="--loader-color: {color}">
-  <div></div>
-  <div></div>
-  <div></div>
-  <div></div>
+  <div />
+  <div />
+  <div />
+  <div />
 </div>
 
 <style>
@@ -49,5 +50,4 @@
             transform: rotate(360deg);
         }
     }
-
 </style>

@@ -9,13 +9,11 @@
   let closeTimeout
 
   onMount(() => {
-    if (options.auto_close)
-      closeTimeout = setTimeout(historyStore.goBack, 5000)
+    if (options.auto_close) closeTimeout = setTimeout(historyStore.goBack, 5000)
   })
 
   onDestroy(() => {
-    if (closeTimeout)
-      clearTimeout(closeTimeout)
+    if (closeTimeout) clearTimeout(closeTimeout)
   })
 </script>
 

@@ -1,6 +1,7 @@
 {
-    "svelteSortOrder": "scripts-markup-styles",
-    "semi": false,
-    "singleQuote": false,
-    "bracketSpacing": false
+  "svelteSortOrder": "scripts-options-markup-styles",
+  "semi": false,
+  "singleQuote": false,
+  "bracketSpacing": false,
+  "endOfLine": "auto"
 }

@@ -8,7 +8,6 @@ import Message from "./pages/Message.svelte"
 import FileReceive from "./pages/FileReceive.svelte"
 import TxtView from "./pages/TxtView.svelte"
 
-
 export const routes = {
   [pages.filesList]: FilesList,
   [pages.pdfView]: PdfView,

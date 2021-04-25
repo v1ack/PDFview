@@ -30,7 +30,6 @@
   let selectTimeout
   let containerNode
 
-
   /**
    * Предыдущий выбранный элемент. Нужен чтобы понимать произошли ли изменения
    * @type {number}
@@ -71,14 +70,18 @@
 
   function setAnimation(node) {
     let width = node.offsetWidth
-    if (width + 20 > 360)
-      node.classList.add("animated")
+    if (width + 20 > 360) node.classList.add("animated")
   }
 </script>
 
 <svelte:window on:rotarydetent={bezelRotate} />
 
-<div bind:this={containerNode} class="cont" on:scroll={scroll} style="height: {height}px;">
+<div
+  bind:this={containerNode}
+  class="cont"
+  on:scroll={scroll}
+  style="height: {height}px;"
+>
   <div class="item fake-item" style="height: {itemHeight}px;">
     {#if title}
       <div class="title" style="color: #14b6ff">{title}</div>
@@ -87,14 +90,18 @@
   <!-- TODO: добавить id -->
   {#each items as item, i (item.title || item)}
     <div
-      on:click={()=>dispatch("click", item)}
+      on:click={() => dispatch("click", item)}
       class:active={chosen === i}
       class="item"
       style="height: {itemHeight}px;"
     >
-      <div class="title"><span use:setAnimation>{item.title ? item.title : item}</span></div>
+      <div class="title">
+        <span use:setAnimation>{item.title ? item.title : item}</span>
+      </div>
       {#if chosen === i && item.subtitle}
-        <div class="subtitle" transition:slide={{duration: 500}}>{item.subtitle}</div>
+        <div class="subtitle" transition:slide={{duration: 500}}>
+          {item.subtitle}
+        </div>
       {/if}
     </div>
   {/each}
@@ -129,7 +136,6 @@
 
     .active .title {
         font-size: 2.2em;
-
     }
 
     .subtitle {
@@ -160,4 +166,3 @@
         }
     }
 </style>
-

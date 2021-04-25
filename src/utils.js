@@ -1,8 +1,7 @@
 import {pages} from "./constants"
 
 export function scrollTo(node, x, y) {
-  if (node.scrollTo)
-    node.scrollTo(x, y)
+  if (node.scrollTo) node.scrollTo(x, y)
   else {
     node.scrollTop = y
     node.scrollLeft = x
@@ -10,7 +9,10 @@ export function scrollTo(node, x, y) {
 }
 
 export function bezelEventScroll(node, event) {
-  if (event.detail.direction === "CW" && node.scrollHeight - node.clientHeight > node.scrollTop - 1)
+  if (
+    event.detail.direction === "CW" &&
+    node.scrollHeight - node.clientHeight > node.scrollTop - 1
+  )
     scrollTo(node, 0, node.scrollTop + 150)
   if (event.detail.direction === "CCW" && node.scrollTop > 0)
     scrollTo(node, 0, node.scrollTop - 150)

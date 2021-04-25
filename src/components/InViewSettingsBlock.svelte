@@ -7,7 +7,11 @@
 <div>
   <p class="title">{title}</p>
   {#each buttons as {id, image, label}}
-    <div on:click={() => current = id} class:active={id === current} class="button">
+    <div
+      on:click={() => (current = id)}
+      class:active={id === current}
+      class="button"
+    >
       <img src={image} alt="action" />
       <span>{label}</span>
     </div>
@@ -15,7 +19,6 @@
 </div>
 
 <style>
-
     .button {
         display: inline-flex;
         flex-direction: column;

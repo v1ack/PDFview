@@ -4,14 +4,14 @@
   let isOpen = false
 </script>
 
-<div class="center-right open-button" on:click={() => isOpen = true}>
-  <img alt="settings" src="/icons/more.svg">
+<div class="center-right open-button" on:click={() => (isOpen = true)}>
+  <img alt="settings" src="/icons/more.svg" />
 </div>
 {#if isOpen}
-  <div class="wrapper" on:click={() => isOpen = false}>
+  <div class="wrapper" on:click={() => (isOpen = false)}>
     <div transition:fly={{x: 360}} class="center-right buttons-container">
-      <div on:click={() => isOpen = false} class="close-button">
-        <img src="/icons/right-arrow.svg" alt="close">
+      <div on:click={() => (isOpen = false)} class="close-button">
+        <img src="/icons/right-arrow.svg" alt="close" />
       </div>
       <slot />
     </div>
@@ -29,7 +29,7 @@
     .buttons-container {
         background-color: black;
         border-radius: 40px 0 0 40px;
-        padding: 6px 30px 6px 1px;
+        padding: 6px 10px 6px 1px;
         display: flex;
         align-items: stretch;
     }

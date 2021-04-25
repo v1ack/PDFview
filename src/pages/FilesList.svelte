@@ -36,74 +36,83 @@
     if (isDev)
       return new Promise((resolve, reject) => {
         setTimeout(() => {
-          let filesList = [{
-            title: "Course work",
-            path: "coursework.pdf",
-            modified: "dsf",
-            subtitle: humanFileSize(23423523, false)
-          }, {
-            title: "A strange file with a too long name and o dont know how it can be that",
-            path: "coursework.txt",
-            modified: "dsf",
-            subtitle: humanFileSize(8949353, false)
-          }, {
-            title: "Markdown file",
-            path: "coursework.md",
-            modified: "dsf",
-            subtitle: humanFileSize(2432, false)
-          }]
+          let filesList = [
+            {
+              title: "Course work",
+              path: "coursework.pdf",
+              modified: "dsf",
+              subtitle: humanFileSize(23423523, false)
+            },
+            {
+              title:
+                "A strange file with a too long name and o dont know how it can be that",
+              path: "coursework.txt",
+              modified: "dsf",
+              subtitle: humanFileSize(8949353, false)
+            },
+            {
+              title: "Markdown file",
+              path: "coursework.md",
+              modified: "dsf",
+              subtitle: humanFileSize(2432, false)
+            }
+          ]
           files = filesList
           resolve(filesList)
         }, 500)
       })
 
     return new Promise((resolve, reject) => {
-      tizen.filesystem.resolve(defaultDir, (dir) => {
-        dir.listFiles((list) => {
-          let filesList = []
-          for (let f of list) {
-            if (types.indexOf(f.name.split(".").pop().toLowerCase()) > -1) {
-              filesList.push({
-                title: f.name,
-                path: f.fullPath,
-                modified: f.modified,
-                subtitle: humanFileSize(f.fileSize, false)
-              })
+      tizen.filesystem.resolve(
+        defaultDir,
+        (dir) => {
+          dir.listFiles((list) => {
+            let filesList = []
+            for (let f of list) {
+              if (types.indexOf(f.name.split(".").pop().toLowerCase()) > -1) {
+                filesList.push({
+                  title: f.name,
+                  path: f.fullPath,
+                  modified: f.modified,
+                  subtitle: humanFileSize(f.fileSize, false)
+                })
+              }
             }
-          }
-          files = filesList
-          resolve(filesList)
-        }, reject)
-      }, reject, "r")
+            files = filesList
+            resolve(filesList)
+          }, reject)
+        },
+        reject,
+        "r"
+      )
     })
   }
 
   function click(e) {
     const path = e.detail.path
     let process = true
-    configStore.update(prev => {
+    configStore.update((prev) => {
       if (app_type === "demo") {
         let openedFiles = JSON.parse(prev.files)
         if (openedFiles.indexOf(path) > -1 || openedFiles.length < 3) {
-          if (openedFiles.indexOf(path) === -1)
-            openedFiles.push(path)
-        } else
-          process = false
+          if (openedFiles.indexOf(path) === -1) openedFiles.push(path)
+        } else process = false
         return {...prev, lastFile: path, files: JSON.stringify(openedFiles)}
-      } else
-        return {...prev, lastFile: path}
+      } else return {...prev, lastFile: path}
     })
     if (process) {
       historyStore.goTo(getViewPageId(path), {path})
     } else
-      historyStore.goTo(pages.message, {message: "You reach the limit of the demo version"})
+      historyStore.goTo(pages.message, {
+        message: "You reach the limit of the demo version"
+      })
   }
 
   function deleteFile() {
     let file = files[chosenFileIndex].path
     let delete_ = confirm("Are you shure to delete " + file + "?")
     if (delete_) {
-      tizen.filesystem.resolve("documents", dir => dir.deleteFile(file))
+      tizen.filesystem.resolve("documents", (dir) => dir.deleteFile(file))
       loadFiles()
     }
   }
@@ -116,7 +125,12 @@
   </div>
 {:then files_}
   {#if files.length}
-    <List items={files} title="Open file" on:click={click} bind:chosen={chosenFileIndex} />
+    <List
+      items={files}
+      title="Open file"
+      on:click={click}
+      bind:chosen={chosenFileIndex}
+    />
     <button class="trash" on:click={deleteFile}>🗑</button>
   {:else}
     <div class="loader" transition:fade>

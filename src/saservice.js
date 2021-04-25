@@ -19,7 +19,10 @@ export function SAServer() {
    * @id  {String} Element id.
    */
   function showNote(id, auto_close = true) {
-    historyStore.goTo(pages.message, {message: saMessages[id.toLocaleLowerCase()], auto_close})
+    historyStore.goTo(pages.message, {
+      message: saMessages[id.toLocaleLowerCase()],
+      auto_close
+    })
   }
 
   /**
@@ -36,8 +39,7 @@ export function SAServer() {
           onrequest: (peerAgent) => {
             if (peerAgent.appName === appName)
               SAAgent.acceptServiceConnectionRequest(peerAgent)
-            else
-              SAAgent.rejectServiceConnectionRequest(peerAgent)
+            else SAAgent.rejectServiceConnectionRequest(peerAgent)
           },
           onconnect: (socket) => {
             socket.setSocketStatusListener((reason) => socket.close())
@@ -75,7 +77,11 @@ export function SAServer() {
         }
 
         progress.set(0)
-        historyStore.goTo(pages.fileReceive, {progress, filename: fileName, cancel})
+        historyStore.goTo(pages.fileReceive, {
+          progress,
+          filename: fileName,
+          cancel
+        })
 
         // progress.value = 0
         // name.innerHTML = fileName

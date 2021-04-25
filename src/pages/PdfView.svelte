@@ -38,8 +38,7 @@
   }
 
   function renderPage(pageNum, pageScale) {
-    if (rendering)
-      renderTask.cancel()
+    if (rendering) renderTask.cancel()
     rendering = true
 
     $docStore.getPage(pageNum).then(function(pdfPage) {
@@ -53,7 +52,7 @@
         canvasContext: ctx,
         viewport
       })
-      renderTask.promise.then(() => rendering = false)
+      renderTask.promise.then(() => (rendering = false))
     })
   }
 
@@ -78,7 +77,11 @@
     }
   }
 
-  const buttons = [bezelActionsButtons.scroll, bezelActionsButtons.scale, bezelActionsButtons.changePage]
+  const buttons = [
+    bezelActionsButtons.scroll,
+    bezelActionsButtons.scale,
+    bezelActionsButtons.changePage
+  ]
 
   let {pdfAction} = $configStore
   $: configStore.set("pdfAction", pdfAction)
@@ -91,7 +94,7 @@
     <span>{currentPage}/{pagesCount}</span>
     <button on:click={towards} style="text-align: left;">&gt</button>
   </div>
-  <canvas bind:this={canvas}></canvas>
+  <canvas bind:this={canvas} />
   {#if !supportBezel}
     <div class="buttons-block bottom">
       <button on:click={scaleDown} style="text-align: right;">-</button>
@@ -102,7 +105,11 @@
 </div>
 {#if supportBezel}
   <InViewSettings>
-    <InViewSettingsBlock bind:current={pdfAction} {buttons} title="Action on bezel" />
+    <InViewSettingsBlock
+      bind:current={pdfAction}
+      {buttons}
+      title="Action on bezel"
+    />
   </InViewSettings>
 {/if}
 

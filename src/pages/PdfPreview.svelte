@@ -15,6 +15,7 @@
   let rendering = false
   let renderTask
   let currentPage = 1
+  let fileLoaded = false
 
   pdfjsLib.GlobalWorkerOptions.workerSrc = "pdf_worker.js"
 
@@ -24,22 +25,32 @@
 
   function getPdfDocFile(path) {
     return new Promise((resolve, reject) => {
-      tizen.filesystem.resolve(path, function(doc) {
-        if (doc.fileSize > 10485760)
-          alert("This file is big, it can cause error")
-        doc.openStream("r", (fs) => {
-          let r = pdfjsLib.getDocument({
-            data: fs.readBytes(doc.fileSize)
-          })
-          resolve(r)
-        }, reject, "UTF-8")
-      }, reject, "r")
+      tizen.filesystem.resolve(
+        path,
+        function(doc) {
+          if (doc.fileSize > 10485760)
+            alert("This file is big, it can cause error")
+          doc.openStream(
+            "r",
+            (fs) => {
+              let r = pdfjsLib.getDocument({
+                data: fs.readBytes(doc.fileSize)
+              })
+              resolve(r)
+            },
+            reject,
+            "UTF-8"
+          )
+        },
+        reject,
+        "r"
+      )
     })
   }
 
   function getPdfDocFileDev(path) {
     return new Promise((resolve, reject) => {
-      resolve(pdfjsLib.getDocument(path))
+      setTimeout(() => resolve(pdfjsLib.getDocument(path)), 500)
     })
   }
 
@@ -47,36 +58,36 @@
     if (isDev) pdfDocFile = await getPdfDocFileDev(path)
     else pdfDocFile = await getPdfDocFile(path)
 
-    pdfDocFile.promise.then(pdf => {
-      pdfDoc = pdf
-      pdf.destroy = pdfDocFile.destroy
-      docStore.set(pdf)
-      return pdf
-    }).then((pdf) => {
-        items = [...Array(pdf.numPages).keys()].map(i => i + 1)
-      }
-    ).then(() => renderPreview(1))
+    pdfDocFile.promise
+      .then((pdf) => {
+        pdfDoc = pdf
+        pdf.destroy = pdfDocFile.destroy
+        docStore.set(pdf)
+        return pdf
+      })
+      .then((pdf) => {
+        items = [...Array(pdf.numPages).keys()].map((i) => i + 1)
+      })
+      .then(() => renderPreview(1))
   }
 
   onMount(async () => {
     if ($docStore) {
-      items = [...Array($docStore.numPages).keys()].map(i => i + 1)
+      items = [...Array($docStore.numPages).keys()].map((i) => i + 1)
       renderPreview(1)
-    } else
-      await loadFileByPath(options.path)
+    } else await loadFileByPath(options.path)
+    fileLoaded = true
   })
 
   function back(e) {
-    if (e.keyName === "back")
-      docStore.clear()
+    if (e.keyName === "back") docStore.clear()
   }
 
   function renderPreview(pageNum) {
-    console.log("draw", pageNum)
+    if (isDev) console.log("draw", pageNum)
 
     // TODO: очередь для рендера файлов
-    if (rendering)
-      renderTask.cancel()
+    if (rendering) renderTask.cancel()
     rendering = true
 
     $docStore.getPage(pageNum).then(function(pdfPage) {
@@ -88,7 +99,7 @@
         canvasContext: ctx,
         viewport
       })
-      renderTask.promise.then(() => rendering = false)
+      renderTask.promise.then(() => (rendering = false))
     })
   }
 
@@ -97,8 +108,7 @@
   function select(e) {
     clearTimeout(timeout)
     currentPage = e.detail.index + 1
-    setTimeout(() =>
-      renderPreview(currentPage), 350)
+    setTimeout(() => renderPreview(currentPage), 350)
   }
 
   function openFile() {
@@ -119,9 +129,11 @@
       </div>
     {/if}
   </div>
-  <div class="button">
-    <Button on:click={openFile}>Open</Button>
-  </div>
+  {#if fileLoaded}
+    <div class="button">
+      <Button on:click={openFile}>Open</Button>
+    </div>
+  {/if}
 </div>
 
 <style>

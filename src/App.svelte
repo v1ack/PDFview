@@ -13,21 +13,35 @@
     if (e.keyName === "back") historyStore.goBack()
   }
 </script>
+
 <svelte:window on:tizenhwkey={back} />
 <div class="background" class:dev-circle={isDev}>
   {#each Object.keys(routes) as routeId}
     {#if $historyStore.pageId == routeId}
       <div class="animated" transition:scale={{start: 0.7}}>
-        <svelte:component this={routes[routeId]} options={$historyStore.options} />
+        <svelte:component
+          this={routes[routeId]}
+          options={$historyStore.options}
+        />
       </div>
     {/if}
   {/each}
 </div>
 {#if isDev}
   <div class="dev-back-button">
-    <button on:click={() => window.dispatchEvent(new CustomEvent("rotarydetent", {detail: {direction: "CCW"}}))}>CCW
+    <button
+      on:click={() =>
+        window.dispatchEvent(
+          new CustomEvent("rotarydetent", {detail: {direction: "CCW"}})
+        )}
+    >CCW
     </button>
-    <button on:click={() => window.dispatchEvent(new CustomEvent("rotarydetent", {detail: {direction: "CW"}}))}>CW
+    <button
+      on:click={() =>
+        window.dispatchEvent(
+          new CustomEvent("rotarydetent", {detail: {direction: "CW"}})
+        )}
+    >CW
     </button>
     <br />
     <button on:click={historyStore.goBack}>&lt;</button>

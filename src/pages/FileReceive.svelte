@@ -3,7 +3,6 @@
 
   export let options
   let progress = options.progress
-
 </script>
 
 <div class="container">
@@ -11,7 +10,7 @@
     <h2>Receiving file</h2>
   </header>
   <div class="filename">{options.filename}</div>
-  <progress max="100" value={$progress}></progress>
+  <progress max="100" value={$progress} />
   <div class="button">
     <Button on:click={options.cancel}>Cancel</Button>
   </div>

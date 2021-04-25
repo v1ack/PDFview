@@ -2,7 +2,6 @@
 import {writable} from "svelte/store"
 import {defaultConfigValues, defaultPage} from "./constants"
 
-
 function createHistoryStore() {
   const history = [defaultPage]
   const store = writable(defaultPage)
@@ -35,7 +34,7 @@ function createDocStore() {
   const store = writable(undefined)
 
   function clear() {
-    store.update(s => {
+    store.update((s) => {
       try {
         s.destroy()
       } catch (e) {
@@ -45,7 +44,7 @@ function createDocStore() {
   }
 
   function set(data) {
-    store.update(s => {
+    store.update((s) => {
       if (s !== undefined) {
         try {
           s.destroy()
@@ -63,24 +62,22 @@ function createConfigStore() {
   const store = writable(defaultConfigValues)
 
   function loadFromLocalStorage() {
-    store.update(s => {
+    store.update((s) => {
       let newData = {...s, ...localStorage}
-      for (let k in newData)
-        localStorage[k] = newData[k]
+      for (let k in newData) localStorage[k] = newData[k]
       return newData
     })
   }
 
   function set(key, value) {
-    store.update(s => ({...s, [key]: value}))
+    store.update((s) => ({...s, [key]: value}))
     localStorage[key] = value
   }
 
   function update(updater) {
-    store.update(prev => {
+    store.update((prev) => {
       let newData = updater(prev)
-      for (let k in newData)
-        localStorage[k] = newData[k]
+      for (let k in newData) localStorage[k] = newData[k]
       return newData
     })
   }
