@@ -7,7 +7,7 @@
 
   SAServer()
 
-  $: console.debug($historyStore)
+  $: if (isDev) console.debug($historyStore)
 
   function back(e) {
     if (e.keyName === "back") historyStore.goBack()

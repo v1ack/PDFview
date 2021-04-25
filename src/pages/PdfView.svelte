@@ -2,8 +2,9 @@
   import {configStore, docStore} from "../store"
   import {onMount} from "svelte"
   import InViewSettings from "../components/InViewSettings.svelte"
-  import {bezelActions} from "../constants"
+  import {bezelActions, bezelActionsButtons, supportBezel} from "../constants"
   import {bezelEventScroll} from "../utils"
+  import InViewSettingsBlock from "../components/InViewSettingsBlock.svelte"
 
   export let options
 
@@ -21,15 +22,19 @@
   })
 
   function towards() {
-    if (currentPage < pagesCount)
-      currentPage += 1
-    else currentPage = 1
+    currentPage = currentPage < pagesCount ? currentPage + 1 : 1
   }
 
   function backwards() {
-    if (currentPage > 1)
-      currentPage -= 1
-    else currentPage = pagesCount
+    currentPage = currentPage > 1 ? currentPage - 1 : pagesCount
+  }
+
+  function scaleUp() {
+    if (pageScale < 2) pageScale += 0.2
+  }
+
+  function scaleDown() {
+    if (pageScale > 0.6) pageScale -= 0.2
   }
 
   function renderPage(pageNum, pageScale) {
@@ -57,12 +62,8 @@
   function bezelRotate(e) {
     switch ($configStore.pdfAction) {
       case bezelActions.scale: {
-        if (e.detail.direction === "CW" && pageScale < 2) {
-          pageScale += 0.2
-        }
-        if (e.detail.direction === "CCW" && pageScale > 0.6) {
-          pageScale -= 0.2
-        }
+        if (e.detail.direction === "CW") scaleUp()
+        if (e.detail.direction === "CCW") scaleDown()
         break
       }
       case bezelActions.changePage: {
@@ -77,42 +78,48 @@
     }
   }
 
-  const buttons = [{
-    id: bezelActions.scale,
-    label: "Scale",
-    image: "/icons/scale.svg"
-  }, {
-    id: bezelActions.scroll,
-    label: "Scroll",
-    image: "/icons/scroll.svg"
-  }, {
-    id: bezelActions.changePage,
-    label: "Page",
-    image: "/icons/change-page.svg"
-  }]
+  const buttons = [bezelActionsButtons.scroll, bezelActionsButtons.scale, bezelActionsButtons.changePage]
 
-  let chosenAction = $configStore.pdfAction
-  $: configStore.set("pdfAction", chosenAction)
+  let {pdfAction} = $configStore
+  $: configStore.set("pdfAction", pdfAction)
 </script>
 
 <svelte:window on:rotarydetent={bezelRotate} />
 <div bind:this={containerNode} class="container">
-  <div class="buttons-block">
+  <div class="buttons-block top">
     <button on:click={backwards} style="text-align: right;">&lt</button>
     <span>{currentPage}/{pagesCount}</span>
     <button on:click={towards} style="text-align: left;">&gt</button>
   </div>
   <canvas bind:this={canvas}></canvas>
+  {#if !supportBezel}
+    <div class="buttons-block bottom">
+      <button on:click={scaleDown} style="text-align: right;">-</button>
+      <span>Scale</span>
+      <button on:click={scaleUp} style="text-align: left;">+</button>
+    </div>
+  {/if}
 </div>
-<InViewSettings bind:current={chosenAction} {buttons} title="Action on bezel" />
+{#if supportBezel}
+  <InViewSettings>
+    <InViewSettingsBlock bind:current={pdfAction} {buttons} title="Action on bezel" />
+  </InViewSettings>
+{/if}
 
 <style>
     .buttons-block {
         width: 360px;
         display: flex;
         position: sticky;
-        top: 0;
         left: 0;
+    }
+
+    .buttons-block.top {
+        top: 0;
+    }
+
+    .buttons-block.bottom {
+        bottom: 0;
     }
 
     .buttons-block button {

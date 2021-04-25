@@ -49,4 +49,35 @@ export const defaultPage = {
   options: {}
 }
 
+export const theme = {
+  black: {
+    background: "#000000",
+    text: "#FFFFFF"
+  },
+  white: {
+    background: "#FFFFFF",
+    text: "#000000"
+  }
+}
+
+export const bezelActionsButtons = {
+  scale: {
+    id: bezelActions.scale,
+    label: "Scale",
+    image: "/icons/scale.svg"
+  },
+  scroll: {
+    id: bezelActions.scroll,
+    label: "Scroll",
+    image: "/icons/scroll.svg"
+  },
+  changePage: {
+    id: bezelActions.changePage,
+    label: "Page",
+    image: "/icons/change-page.svg"
+  }
+}
+
 export const isDev = is_dev
+
+export const supportBezel = isDev || tizen.systeminfo.getCapability("http://tizen.org/feature/input.rotating_bezel")

@@ -2,10 +2,11 @@
   /* global tizen */
   import {onMount} from "svelte"
   import InViewSettings from "../components/InViewSettings.svelte"
-  import {bezelActions, isDev} from "../constants"
+  import {bezelActions, bezelActionsButtons, isDev, supportBezel, theme} from "../constants"
   import {configStore} from "../store"
   import {Remarkable} from "remarkable"
   import {bezelEventScroll} from "../utils"
+  import InViewSettingsBlock from "../components/InViewSettingsBlock.svelte"
 
   export let options
 
@@ -53,43 +54,42 @@
     }
   }
 
-  const buttons = [{
-    id: bezelActions.scale,
-    label: "Scale",
-    image: "/icons/scale.svg"
-  }, {
-    id: bezelActions.scroll,
-    label: "Scroll",
-    image: "/icons/scroll.svg"
-  }]
+  const buttons = [bezelActionsButtons.scroll, bezelActionsButtons.scale]
 
-  const theme = {
-    black: {
-      background: "#000000",
-      text: "#FFFFFF"
-    },
-    white: {
-      background: "#FFFFFF",
-      text: "#000000"
-    }
-  }
+  const buttons2 = [{
+    id: "white",
+    label: "White",
+    image: "/icons/theme-white.svg"
+  }, {
+    id: "black",
+    label: "Black",
+    image: "/icons/theme-black.svg"
+  }]
 
   let {txtTheme, txtAction} = $configStore
   $: configStore.set("txtAction", txtAction)
+  $: configStore.set("txtTheme", txtTheme)
 </script>
 
 <svelte:window on:rotarydetent={bezelRotate} />
 <div
   bind:this={containerNode}
+  class="view"
   style="font-size: {$configStore.txtFontSize}px;
          background-color: {theme[txtTheme].background};
          color: {theme[txtTheme].text};">
   {@html md ? markdown.render(text) : text}
 </div>
-<InViewSettings bind:current={txtAction} {buttons} title="Action on bezel" />
+<InViewSettings>
+  {#if supportBezel}
+    <InViewSettingsBlock bind:current={txtAction} {buttons} title="Action on bezel" />
+    <div style="width: 1px; background-color: azure;margin: 0 5px;"></div>
+  {/if}
+  <InViewSettingsBlock bind:current={txtTheme} buttons={buttons2} title="Theme" />
+</InViewSettings>
 
 <style>
-    div {
+    .view {
         width: inherit;
         height: inherit;
         overflow: scroll;
@@ -102,7 +102,7 @@
         border-radius: 160px;
     }
 
-    div :global(img) {
+    .view :global(img) {
         max-width: 100%;
     }
 </style>
