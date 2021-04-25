@@ -109,60 +109,60 @@
 </div>
 
 <style>
-    .item {
-        text-align: center;
-        margin: 0;
-        box-sizing: border-box;
-        border-radius: 99px;
-        transition: background ease-in-out 0.5s;
-        justify-content: center;
-        display: flex;
-        flex-direction: column;
-    }
+  .item {
+    text-align: center;
+    margin: 0;
+    box-sizing: border-box;
+    border-radius: 99px;
+    transition: background ease-in-out 0.5s;
+    justify-content: center;
+    display: flex;
+    flex-direction: column;
+  }
 
-    .cont {
-        overflow-y: scroll;
-        scroll-behavior: smooth;
-    }
+  .cont {
+    overflow-y: scroll;
+    scroll-behavior: smooth;
+  }
 
-    .active {
-        background: #3a3a3a;
-    }
+  .active {
+    background: #3a3a3a;
+  }
 
-    .title {
-        font-weight: bold;
-        font-size: 2em;
-    }
+  .title {
+    font-weight: bold;
+    font-size: 2em;
+  }
 
-    .active .title {
-        font-size: 2.2em;
-    }
+  .active .title {
+    font-size: 2.2em;
+  }
 
-    .subtitle {
-        font-size: 1.8em;
-    }
+  .subtitle {
+    font-size: 1.8em;
+  }
 
-    .title {
-        max-width: 100%;
-        margin: 0 auto;
-        white-space: nowrap;
-        overflow: hidden;
-    }
+  .title {
+    max-width: 100%;
+    margin: 0 auto;
+    white-space: nowrap;
+    overflow: hidden;
+  }
 
-    .title span {
-        display: inline-block;
-    }
+  .title span {
+    display: inline-block;
+  }
 
-    .title :global(span.animated) {
-        animation: marquee 10s ease-in-out alternate infinite;
-    }
+  .title :global(span.animated) {
+    animation: marquee 10s ease-in-out alternate infinite;
+  }
 
-    @keyframes marquee {
-        0% {
-            transform: translateX(20px);
-        }
-        100% {
-            transform: translateX(calc(-100% + 340px));
-        }
+  @keyframes marquee {
+    0% {
+      transform: translateX(20px);
     }
+    100% {
+      transform: translateX(calc(-100% + 340px));
+    }
+  }
 </style>

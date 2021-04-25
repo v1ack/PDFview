@@ -19,13 +19,29 @@
     return new Promise((resolve, reject) => {
       tizen.filesystem.resolve(
         path,
-        function(doc) {
+        function (doc) {
           doc.readAsText(resolve, reject, "UTF-8")
         },
         reject,
         "r"
       )
     })
+  }
+
+  function scaleUp() {
+    configStore.update((s) => ({
+      ...s,
+      txtFontSize:
+        Number(s.txtFontSize) < 32 ? Number(s.txtFontSize) + 2 : s.txtFontSize,
+    }))
+  }
+
+  function scaleDown() {
+    configStore.update((s) => ({
+      ...s,
+      txtFontSize:
+        Number(s.txtFontSize) > 12 ? Number(s.txtFontSize) - 2 : s.txtFontSize,
+    }))
   }
 
   onMount(async () => {
@@ -42,22 +58,8 @@
         break
       }
       case bezelActions.scale: {
-        if (e.detail.direction === "CW")
-          configStore.update((s) => ({
-            ...s,
-            txtFontSize:
-              Number(s.txtFontSize) < 32
-                ? Number(s.txtFontSize) + 2
-                : s.txtFontSize
-          }))
-        if (e.detail.direction === "CCW")
-          configStore.update((s) => ({
-            ...s,
-            txtFontSize:
-              Number(s.txtFontSize) > 12
-                ? Number(s.txtFontSize) - 2
-                : s.txtFontSize
-          }))
+        if (e.detail.direction === "CW") scaleUp()
+        if (e.detail.direction === "CCW") scaleDown()
         break
       }
     }
@@ -69,13 +71,13 @@
     {
       id: "white",
       label: "White",
-      image: "/icons/theme-white.svg"
+      image: "/icons/theme-white.svg",
     },
     {
       id: "black",
       label: "Black",
-      image: "/icons/theme-black.svg"
-    }
+      image: "/icons/theme-black.svg",
+    },
   ]
 
   let {txtTheme, txtAction} = $configStore
@@ -110,22 +112,49 @@
     title="Theme"
   />
 </InViewSettings>
+{#if !supportBezel}
+  <div class="buttons-block bottom">
+    <button on:click={scaleDown} style="text-align: right;">-</button>
+    <button on:click={scaleUp} style="text-align: left;">+</button>
+  </div>
+{/if}
 
 <style>
-    .view {
-        width: inherit;
-        height: inherit;
-        overflow: scroll;
-        scroll-behavior: smooth;
-        padding: 60px 2.0625rem;
-        box-sizing: border-box;
-        background: white;
-        color: black;
-        word-break: break-word;
-        border-radius: 160px;
-    }
+  .view {
+    width: inherit;
+    height: inherit;
+    overflow: scroll;
+    scroll-behavior: smooth;
+    padding: 60px 2.0625rem;
+    box-sizing: border-box;
+    background: white;
+    color: black;
+    word-break: break-word;
+    border-radius: 160px;
+  }
 
-    .view :global(img) {
-        max-width: 100%;
-    }
+  .view :global(img) {
+    max-width: 100%;
+  }
+
+  .buttons-block {
+    width: 360px;
+    display: flex;
+    position: absolute;
+    left: 0;
+  }
+
+  .buttons-block.bottom {
+    bottom: 0;
+  }
+
+  .buttons-block button {
+    color: #605f5f;
+    flex-grow: 1;
+    height: 50px;
+    border: none;
+    background-color: inherit;
+    font-size: 1.4em;
+    padding: 0 50px;
+  }
 </style>

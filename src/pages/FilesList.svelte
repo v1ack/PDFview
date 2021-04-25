@@ -41,21 +41,21 @@
               title: "Course work",
               path: "coursework.pdf",
               modified: "dsf",
-              subtitle: humanFileSize(23423523, false)
+              subtitle: humanFileSize(23423523, false),
             },
             {
               title:
                 "A strange file with a too long name and o dont know how it can be that",
               path: "coursework.txt",
               modified: "dsf",
-              subtitle: humanFileSize(8949353, false)
+              subtitle: humanFileSize(8949353, false),
             },
             {
               title: "Markdown file",
               path: "coursework.md",
               modified: "dsf",
-              subtitle: humanFileSize(2432, false)
-            }
+              subtitle: humanFileSize(2432, false),
+            },
           ]
           files = filesList
           resolve(filesList)
@@ -74,7 +74,7 @@
                   title: f.name,
                   path: f.fullPath,
                   modified: f.modified,
-                  subtitle: humanFileSize(f.fileSize, false)
+                  subtitle: humanFileSize(f.fileSize, false),
                 })
               }
             }
@@ -104,7 +104,7 @@
       historyStore.goTo(getViewPageId(path), {path})
     } else
       historyStore.goTo(pages.message, {
-        message: "You reach the limit of the demo version"
+        message: "You reach the limit of the demo version",
       })
   }
 
@@ -143,27 +143,27 @@
 {/await}
 
 <style>
-    .loader {
-        position: absolute;
-        left: 50%;
-        top: 50%;
-        transform: translate(-50%, -50%);
-    }
+  .loader {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+  }
 
-    .loader p {
-        font-size: 1.4em;
-        margin-top: 0;
-        text-align: center;
-    }
+  .loader p {
+    font-size: 1.4em;
+    margin-top: 0;
+    text-align: center;
+  }
 
-    .trash {
-        position: absolute;
-        top: 50%;
-        right: 0;
-        background: none;
-        color: white;
-        border: none;
-        font-size: 2.3em;
-        transform: translateY(-50%);
-    }
+  .trash {
+    position: absolute;
+    top: 50%;
+    right: 0;
+    background: none;
+    color: white;
+    border: none;
+    font-size: 2.3em;
+    transform: translateY(-50%);
+  }
 </style>

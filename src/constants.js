@@ -1,7 +1,8 @@
+/* global tizen */
 export const bezelActions = {
   scale: "scale",
   scroll: "scroll",
-  changePage: "changePage"
+  changePage: "changePage",
 }
 
 export const defaultConfigValues = {
@@ -10,7 +11,7 @@ export const defaultConfigValues = {
   txtAction: bezelActions.scroll,
   txtFontSize: "16",
   txtTheme: "white",
-  pdfAction: bezelActions.scale
+  pdfAction: bezelActions.scale,
 }
 
 export const pages = {
@@ -22,7 +23,7 @@ export const pages = {
   settings: 6,
   message: 8,
   fileReceive: 9,
-  txtView: 12
+  txtView: 12,
 }
 
 export const saMessages = {
@@ -45,41 +46,41 @@ export const saMessages = {
     "The receiver device does not have enough free space available.",
   unknown_error: "Unknown error occurred.",
   onconnect: "File transfer connection established.",
-  oncomplete: "File transfer ended successful."
+  oncomplete: "File transfer ended successful.",
 }
 
 export const defaultPage = {
   pageId: pages.mainScreen,
-  options: {}
+  options: {},
 }
 
 export const theme = {
   black: {
     background: "#000000",
-    text: "#FFFFFF"
+    text: "#FFFFFF",
   },
   white: {
     background: "#FFFFFF",
-    text: "#000000"
-  }
+    text: "#000000",
+  },
 }
 
 export const bezelActionsButtons = {
   scale: {
     id: bezelActions.scale,
     label: "Scale",
-    image: "/icons/scale.svg"
+    image: "/icons/scale.svg",
   },
   scroll: {
     id: bezelActions.scroll,
     label: "Scroll",
-    image: "/icons/scroll.svg"
+    image: "/icons/scroll.svg",
   },
   changePage: {
     id: bezelActions.changePage,
     label: "Page",
-    image: "/icons/change-page.svg"
-  }
+    image: "/icons/change-page.svg",
+  },
 }
 
 export const isDev = is_dev

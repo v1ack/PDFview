@@ -16,5 +16,5 @@ export const routes = {
   [pages.mainScreen]: MainScreen,
   [pages.message]: Message,
   [pages.fileReceive]: FileReceive,
-  [pages.txtView]: TxtView
+  [pages.txtView]: TxtView,
 }

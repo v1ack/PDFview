@@ -27,14 +27,14 @@
     return new Promise((resolve, reject) => {
       tizen.filesystem.resolve(
         path,
-        function(doc) {
+        function (doc) {
           if (doc.fileSize > 10485760)
             alert("This file is big, it can cause error")
           doc.openStream(
             "r",
             (fs) => {
               let r = pdfjsLib.getDocument({
-                data: fs.readBytes(doc.fileSize)
+                data: fs.readBytes(doc.fileSize),
               })
               resolve(r)
             },
@@ -58,7 +58,7 @@
     if (isDev) pdfDocFile = await getPdfDocFileDev(path)
     else pdfDocFile = await getPdfDocFile(path)
 
-    pdfDocFile.promise
+    return pdfDocFile.promise
       .then((pdf) => {
         pdfDoc = pdf
         pdf.destroy = pdfDocFile.destroy
@@ -68,14 +68,13 @@
       .then((pdf) => {
         items = [...Array(pdf.numPages).keys()].map((i) => i + 1)
       })
-      .then(() => renderPreview(1))
   }
 
   onMount(async () => {
-    if ($docStore) {
+    if ($docStore)
       items = [...Array($docStore.numPages).keys()].map((i) => i + 1)
-      renderPreview(1)
-    } else await loadFileByPath(options.path)
+    else await loadFileByPath(options.path)
+    renderPreview(1)
     fileLoaded = true
   })
 
@@ -90,14 +89,14 @@
     if (rendering) renderTask.cancel()
     rendering = true
 
-    $docStore.getPage(pageNum).then(function(pdfPage) {
+    $docStore.getPage(pageNum).then(function (pdfPage) {
       const viewport = pdfPage.getViewport({scale: 0.17})
       canvas.width = viewport.width
       canvas.height = viewport.height
       const ctx = canvas.getContext("2d")
       renderTask = pdfPage.render({
         canvasContext: ctx,
-        viewport
+        viewport,
       })
       renderTask.promise.then(() => (rendering = false))
     })
@@ -137,39 +136,39 @@
 </div>
 
 <style>
-    .button {
-        position: absolute;
-        bottom: 0;
-        left: 20%;
-        margin-bottom: 10px;
-    }
+  .button {
+    position: absolute;
+    bottom: 0;
+    left: 20%;
+    margin-bottom: 10px;
+  }
 
-    .container {
-        position: relative;
-        padding-top: 80px;
-        padding-left: 2.0625rem;
-        padding-right: 2.0625rem;
-    }
+  .container {
+    position: relative;
+    padding-top: 80px;
+    padding-left: 2.0625rem;
+    padding-right: 2.0625rem;
+  }
 
-    canvas {
-        position: absolute;
-        left: 200px;
-    }
+  canvas {
+    position: absolute;
+    left: 200px;
+  }
 
-    .list {
-        position: absolute;
-        height: 200px;
-        width: 140px;
-    }
+  .list {
+    position: absolute;
+    height: 200px;
+    width: 140px;
+  }
 
-    .main {
-        height: 360px;
-        position: relative;
-    }
+  .main {
+    height: 360px;
+    position: relative;
+  }
 
-    .loader {
-        position: absolute;
-        left: 205px;
-        top: 140px;
-    }
+  .loader {
+    position: absolute;
+    left: 205px;
+    top: 140px;
+  }
 </style>

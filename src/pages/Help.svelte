@@ -13,10 +13,10 @@
           null,
           [
             new tizen.ApplicationControlData("msgId", [
-              "mgr_install_host_app_req"
+              "mgr_install_host_app_req",
             ]),
             new tizen.ApplicationControlData("type", ["phone"]),
-            new tizen.ApplicationControlData("deeplink", [url])
+            new tizen.ApplicationControlData("deeplink", [url]),
           ]
         ),
         "com.samsung.w-manager-service",
@@ -45,12 +45,12 @@
 </div>
 
 <style>
-    .container {
-        text-align: center;
-        padding: 30px 50px;
-        box-sizing: border-box;
-        font-size: 1.6em;
-        height: 360px;
-        width: 360px;
-    }
+  .container {
+    text-align: center;
+    padding: 30px 50px;
+    box-sizing: border-box;
+    font-size: 1.6em;
+    height: 360px;
+    width: 360px;
+  }
 </style>

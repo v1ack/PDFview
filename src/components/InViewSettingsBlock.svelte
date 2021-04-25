@@ -19,28 +19,28 @@
 </div>
 
 <style>
-    .button {
-        display: inline-flex;
-        flex-direction: column;
-        align-items: center;
-        padding: 7px;
-        border-radius: 999px;
-        height: 70px;
-        width: 70px;
-        box-sizing: border-box;
-    }
+  .button {
+    display: inline-flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 7px;
+    border-radius: 999px;
+    height: 70px;
+    width: 70px;
+    box-sizing: border-box;
+  }
 
-    .button.active {
-        background-color: #3a3a3a;
-    }
+  .button.active {
+    background-color: #3a3a3a;
+  }
 
-    .button img {
-        height: 36px;
-    }
+  .button img {
+    height: 36px;
+  }
 
-    .title {
-        text-align: center;
-        margin: 0 0 6px 0;
-        font-size: 1.3em;
-    }
+  .title {
+    text-align: center;
+    margin: 0 0 6px 0;
+    font-size: 1.3em;
+  }
 </style>

@@ -7,7 +7,7 @@
   let pagesList = [
     {title: "Open", subtitle: "Open a load file", pageId: pages.filesList},
     // {title: "Settings", subtitle: "Bezel action", pageId: pages.settings},
-    {title: "Help", subtitle: "App description", pageId: pages.help}
+    {title: "Help", subtitle: "App description", pageId: pages.help},
   ]
   if ($configStore.lastFile) {
     let path = $configStore.lastFile
@@ -19,9 +19,9 @@
         title: "Last file",
         subtitle: filename,
         pageId: getViewPageId(path),
-        options: {path}
+        options: {path},
       },
-      ...pagesList
+      ...pagesList,
     ]
   }
 

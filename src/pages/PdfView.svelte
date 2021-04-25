@@ -41,7 +41,7 @@
     if (rendering) renderTask.cancel()
     rendering = true
 
-    $docStore.getPage(pageNum).then(function(pdfPage) {
+    $docStore.getPage(pageNum).then(function (pdfPage) {
       const viewport = pdfPage.getViewport({scale: pageScale})
       canvas.width = viewport.width
       canvas.height = viewport.height
@@ -50,7 +50,7 @@
       // TODO: очередь для рендера файлов
       renderTask = pdfPage.render({
         canvasContext: ctx,
-        viewport
+        viewport,
       })
       renderTask.promise.then(() => (rendering = false))
     })
@@ -80,7 +80,7 @@
   const buttons = [
     bezelActionsButtons.scroll,
     bezelActionsButtons.scale,
-    bezelActionsButtons.changePage
+    bezelActionsButtons.changePage,
   ]
 
   let {pdfAction} = $configStore
@@ -88,7 +88,11 @@
 </script>
 
 <svelte:window on:rotarydetent={bezelRotate} />
-<div bind:this={containerNode} class="container">
+<div
+  bind:this={containerNode}
+  class="container"
+  class:bottom-padding={!supportBezel}
+>
   <div class="buttons-block top">
     <button on:click={backwards} style="text-align: right;">&lt</button>
     <span>{currentPage}/{pagesCount}</span>
@@ -98,7 +102,6 @@
   {#if !supportBezel}
     <div class="buttons-block bottom">
       <button on:click={scaleDown} style="text-align: right;">-</button>
-      <span>Scale</span>
       <button on:click={scaleUp} style="text-align: left;">+</button>
     </div>
   {/if}
@@ -114,44 +117,51 @@
 {/if}
 
 <style>
-    .buttons-block {
-        width: 360px;
-        display: flex;
-        position: sticky;
-        left: 0;
-    }
+  .buttons-block {
+    width: 360px;
+    display: flex;
+    position: absolute;
+    left: 0;
+  }
 
-    .buttons-block.top {
-        top: 0;
-    }
+  .buttons-block.top {
+    top: 0;
+  }
 
-    .buttons-block.bottom {
-        bottom: 0;
-    }
+  .buttons-block.bottom {
+    bottom: 0;
+  }
 
-    .buttons-block button {
-        flex-grow: 1;
-        height: 50px;
-        border: none;
-        background-color: white;
-        font-size: 1.4em;
-        padding: 0 50px;
-    }
+  .buttons-block button {
+    color: #605f5f;
+    flex-grow: 1;
+    height: 50px;
+    border: none;
+    background-color: inherit;
+    font-size: 1.4em;
+    padding: 0 50px;
+  }
 
-    .buttons-block span {
-        left: 50%;
-        transform: translateX(-50%);
-        position: absolute;
-        top: 10px;
-        color: black;
-        font-size: 1.3em;
-    }
+  .buttons-block span {
+    left: 50%;
+    transform: translateX(-50%);
+    position: absolute;
+    top: 10px;
+    color: black;
+    font-size: 1.3em;
+  }
 
-    .container {
-        overflow: scroll;
-        scroll-behavior: smooth;
-        height: inherit;
-        width: inherit;
-        border-radius: 160px;
-    }
+  .container {
+    padding-top: 50px;
+    overflow: scroll;
+    scroll-behavior: smooth;
+    height: inherit;
+    width: inherit;
+    border-radius: 160px;
+    background-color: white;
+    box-sizing: border-box;
+  }
+  .container.bottom-padding {
+    padding-bottom: 50px;
+  }
 </style>

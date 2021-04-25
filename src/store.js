@@ -37,8 +37,7 @@ function createDocStore() {
     store.update((s) => {
       try {
         s.destroy()
-      } catch (e) {
-      }
+      } catch (e) {}
       return undefined
     })
   }
@@ -48,8 +47,7 @@ function createDocStore() {
       if (s !== undefined) {
         try {
           s.destroy()
-        } catch (e) {
-        }
+        } catch (e) {}
       }
       return data
     })

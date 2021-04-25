@@ -21,7 +21,7 @@ export function SAServer() {
   function showNote(id, auto_close = true) {
     historyStore.goTo(pages.message, {
       message: saMessages[id.toLocaleLowerCase()],
-      auto_close
+      auto_close,
     })
   }
 
@@ -32,7 +32,7 @@ export function SAServer() {
    * @onerror         {Function} onerror Method executed after socket connection failure with error code as argument.
    */
   function SAServerOpen(appName, onFileTransfer, onerror) {
-    webapis.sa.requestSAAgent(function(agents) {
+    webapis.sa.requestSAAgent(function (agents) {
       if (agents.length > 0) {
         let SAAgent = agents[0]
         SAAgent.setServiceConnectionListener({
@@ -45,7 +45,7 @@ export function SAServer() {
             socket.setSocketStatusListener((reason) => socket.close())
             showNote("onconnect")
           },
-          onerror: onerror
+          onerror: onerror,
         })
         onFileTransfer(SAAgent.getSAFileTransfer())
       }
@@ -63,11 +63,11 @@ export function SAServer() {
     //   button = $("sa-file-button")
     const progress = tweened(0, {
       duration: 400,
-      easing: cubicOut
+      easing: cubicOut,
     })
 
     SAFileTransfer.setFileReceiveListener({
-      onreceive: function(id, fileName) {
+      onreceive: function (id, fileName) {
         function cancel() {
           try {
             SAFileTransfer.cancelFile(id)
@@ -80,7 +80,7 @@ export function SAServer() {
         historyStore.goTo(pages.fileReceive, {
           progress,
           filename: fileName,
-          cancel
+          cancel,
         })
 
         // progress.value = 0
@@ -96,15 +96,15 @@ export function SAServer() {
           onerror("unknown_error")
         }
       },
-      onprogress: function(id, value) {
+      onprogress: function (id, value) {
         progress.set(value)
         // progress.value = value
         // ratio.innerHTML = value + "%"
       },
-      oncomplete: function(id, localPath) {
+      oncomplete: function (id, localPath) {
         onerror("oncomplete")
       },
-      onerror: onerror
+      onerror: onerror,
     })
   }
 

@@ -27,24 +27,24 @@
 </div>
 
 <style>
-    .container {
-        text-align: center;
-        height: inherit;
-        overflow-y: scroll;
-        scroll-behavior: smooth;
-    }
+  .container {
+    text-align: center;
+    height: inherit;
+    overflow-y: scroll;
+    scroll-behavior: smooth;
+  }
 
-    .message {
-        font-size: 1.7em;
-        min-height: 360px;
-        padding: 60px 2.0625rem 100px;
-        box-sizing: border-box;
-    }
+  .message {
+    font-size: 1.7em;
+    min-height: 360px;
+    padding: 60px 2.0625rem 100px;
+    box-sizing: border-box;
+  }
 
-    .button {
-        left: 74px;
-        margin-bottom: 14px;
-        position: absolute;
-        bottom: 0;
-    }
+  .button {
+    left: 74px;
+    margin-bottom: 14px;
+    position: absolute;
+    bottom: 0;
+  }
 </style>

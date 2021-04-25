@@ -34,14 +34,14 @@
         window.dispatchEvent(
           new CustomEvent("rotarydetent", {detail: {direction: "CCW"}})
         )}
-    >CCW
+      >CCW
     </button>
     <button
       on:click={() =>
         window.dispatchEvent(
           new CustomEvent("rotarydetent", {detail: {direction: "CW"}})
         )}
-    >CW
+      >CW
     </button>
     <br />
     <button on:click={historyStore.goBack}>&lt;</button>
@@ -49,28 +49,28 @@
 {/if}
 
 <style>
-    .background {
-        height: 360px;
-        width: 360px;
-        box-sizing: border-box;
-    }
+  .background {
+    height: 360px;
+    width: 360px;
+    box-sizing: border-box;
+  }
 
-    .dev-circle {
-        border: 1px solid white;
-        border-radius: 999px;
-    }
+  .dev-circle {
+    border: 1px solid white;
+    border-radius: 999px;
+  }
 
-    .animated {
-        position: absolute;
-        width: 100%;
-        height: 100%;
-        left: 0;
-        top: 0;
-    }
+  .animated {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    left: 0;
+    top: 0;
+  }
 
-    .dev-back-button {
-        position: fixed;
-        top: 0;
-        left: 0;
-    }
+  .dev-back-button {
+    position: fixed;
+    top: 0;
+    left: 0;
+  }
 </style>
