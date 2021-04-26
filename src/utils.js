@@ -19,9 +19,7 @@ export function bezelEventScroll(node, event) {
 }
 
 export function getViewPageId(path) {
-  let extension = path.toLowerCase().split(".")
-  extension = extension[extension.length - 1]
-  switch (extension) {
+  switch (getExtension(path)) {
     case "pdf": {
       return pages.pdfPreview
     }
@@ -32,4 +30,8 @@ export function getViewPageId(path) {
       return pages.txtView
     }
   }
+}
+
+export function getExtension(path) {
+  return path.split(".").pop().toLowerCase()
 }

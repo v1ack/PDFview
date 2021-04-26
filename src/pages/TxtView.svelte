@@ -5,7 +5,7 @@
   import {bezelActions, bezelActionsButtons, isDev, supportBezel, theme} from "../constants"
   import {configStore} from "../store"
   import {Remarkable} from "remarkable"
-  import {bezelEventScroll} from "../utils"
+  import {bezelEventScroll, getExtension} from "../utils"
   import InViewSettingsBlock from "../components/InViewSettingsBlock.svelte"
 
   export let options
@@ -13,7 +13,7 @@
   let containerNode
   const markdown = new Remarkable()
   let text = ""
-  const md = options.path.split(".").pop().toLowerCase() === "md"
+  const md = getExtension(options.path) === "md"
 
   function readFile(path) {
     return new Promise((resolve, reject) => {

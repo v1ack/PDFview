@@ -46,6 +46,7 @@
     height: 28px;
   }
 
+  /* TODO: выяснить в чем прикол в tizen 3 */
   .close-button img {
     height: 38px;
     position: relative;

@@ -1,7 +1,8 @@
 <script>
+  /* global tizen */
   import List from "../components/List.svelte"
   import {configStore, historyStore} from "../store"
-  import {pages} from "../constants"
+  import {isDev, pages} from "../constants"
   import {getViewPageId} from "../utils"
 
   let pagesList = [
@@ -11,18 +12,19 @@
   ]
   if ($configStore.lastFile) {
     let path = $configStore.lastFile
-    // TODO: проверять существует ли файл
-    let filename = path.split("/")
-    filename = filename[filename.length - 1]
-    pagesList = [
-      {
-        title: "Last file",
-        subtitle: filename,
-        pageId: getViewPageId(path),
-        options: {path},
-      },
-      ...pagesList,
-    ]
+    if (isDev || tizen.filesystem.pathExists(path)) {
+      let filename = path.split("/")
+      filename = filename[filename.length - 1]
+      pagesList = [
+        {
+          title: "Last file",
+          subtitle: filename,
+          pageId: getViewPageId(path),
+          options: {path},
+        },
+        ...pagesList,
+      ]
+    }
   }
 
   function click(e) {
