@@ -47,7 +47,7 @@
 <style>
   .container {
     text-align: center;
-    padding: 30px 50px;
+    padding: 70px 2.0625rem;
     box-sizing: border-box;
     font-size: 1.6em;
     height: 360px;

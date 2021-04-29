@@ -125,7 +125,7 @@
     height: inherit;
     overflow: scroll;
     scroll-behavior: smooth;
-    padding: 60px 2.0625rem;
+    padding: 70px 2.0625rem;
     box-sizing: border-box;
     background: white;
     color: black;

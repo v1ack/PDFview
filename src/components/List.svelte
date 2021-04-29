@@ -140,6 +140,10 @@
 
   .subtitle {
     font-size: 1.8em;
+    /* TODO: сделать плавающий текст */
+    max-height: 72px;
+    overflow: hidden;
+    word-break: break-all;
   }
 
   .title {

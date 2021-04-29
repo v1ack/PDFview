@@ -3,7 +3,7 @@
   import List from "../components/List.svelte"
   import {configStore, historyStore} from "../store"
   import {isDev, pages} from "../constants"
-  import {getViewPageId} from "../utils"
+  import {getViewPageId, pathExists} from "../utils"
 
   let pagesList = [
     {title: "Open", subtitle: "Open a load file", pageId: pages.filesList},
@@ -12,7 +12,7 @@
   ]
   if ($configStore.lastFile) {
     let path = $configStore.lastFile
-    if (isDev || tizen.filesystem.pathExists(path)) {
+    if (isDev || pathExists(path)) {
       let filename = path.split("/")
       filename = filename[filename.length - 1]
       pagesList = [

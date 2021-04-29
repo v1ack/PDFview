@@ -50,8 +50,7 @@
   .close-button img {
     height: 38px;
     position: relative;
-    top: 50%;
-    transform: translateY(-50%);
+    top: 34px;
   }
 
   .wrapper {

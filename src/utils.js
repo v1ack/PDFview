@@ -1,3 +1,4 @@
+/* global tizen */
 import {pages} from "./constants"
 
 export function scrollTo(node, x, y) {
@@ -34,4 +35,16 @@ export function getViewPageId(path) {
 
 export function getExtension(path) {
   return path.split(".").pop().toLowerCase()
+}
+
+export async function pathExists(path) {
+  if (tizen.filesystem.pathExists) return tizen.filesystem.pathExists(path)
+  return new Promise((resolve) =>
+    tizen.filesystem.resolve(
+      path,
+      () => resolve(true),
+      () => resolve(false),
+      "r"
+    )
+  )
 }
