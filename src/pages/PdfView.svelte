@@ -2,7 +2,7 @@
   import {configStore, docStore} from "../store"
   import {onMount} from "svelte"
   import InViewSettings from "../components/InViewSettings.svelte"
-  import {bezelActions, bezelActionsButtons, supportBezel} from "../constants"
+  import {bezelActions, bezelActionsButtons} from "../constants"
   import {bezelEventScroll} from "../utils"
   import InViewSettingsBlock from "../components/InViewSettingsBlock.svelte"
 
@@ -91,7 +91,7 @@
 <div
   bind:this={containerNode}
   class="container"
-  class:bottom-padding={!supportBezel}
+  class:bottom-padding={!$configStore.supportBezel}
 >
   <div class="buttons-block top">
     <button on:click={backwards} style="text-align: right;">&lt</button>
@@ -99,14 +99,14 @@
     <button on:click={towards} style="text-align: left;">&gt</button>
   </div>
   <canvas bind:this={canvas} />
-  {#if !supportBezel}
+  {#if $configStore.zoomButtons}
     <div class="buttons-block bottom">
       <button on:click={scaleDown} style="text-align: right;">-</button>
       <button on:click={scaleUp} style="text-align: left;">+</button>
     </div>
   {/if}
 </div>
-{#if supportBezel}
+{#if $configStore.supportBezel}
   <InViewSettings>
     <InViewSettingsBlock
       bind:current={pdfAction}

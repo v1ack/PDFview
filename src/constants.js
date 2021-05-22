@@ -12,6 +12,14 @@ export const defaultConfigValues = {
   txtFontSize: "16",
   txtTheme: "white",
   pdfAction: bezelActions.scale,
+  zoomButtons: "",
+  supportBezel:
+    isDev ||
+    tizen.systeminfo.getCapability(
+      "http://tizen.org/feature/input.rotating_bezel"
+    )
+      ? "true"
+      : "",
 }
 
 export const pages = {
@@ -84,9 +92,3 @@ export const bezelActionsButtons = {
 }
 
 export const isDev = is_dev
-
-export const supportBezel =
-  isDev ||
-  tizen.systeminfo.getCapability(
-    "http://tizen.org/feature/input.rotating_bezel"
-  )

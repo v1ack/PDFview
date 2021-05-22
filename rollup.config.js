@@ -10,8 +10,8 @@ import {copySync} from "fs-extra"
 import path from "path"
 import babel from "@rollup/plugin-babel"
 
-const pdfJsWorker = path.resolve(__dirname, "node_modules/pdfjs-dist/es5/build/pdf.worker.min.js")
-const pdfJs = path.resolve(__dirname, "node_modules/pdfjs-dist/es5/build/pdf.min.js")
+const pdfJsWorker = path.resolve(__dirname, "node_modules/pdfjs-dist/es5/build/pdf.worker.js")
+// const pdfJs = path.resolve(__dirname, "node_modules/pdfjs-dist/es5/build/pdf.js")
 // const pdfJsWorker = path.resolve(__dirname, "node_modules/pdfjs-dist/build/pdf.worker.min.js")
 // const pdfJs = path.resolve(__dirname, "node_modules/pdfjs-dist/build/pdf.min.js")
 
@@ -90,7 +90,7 @@ const copyToDist = () => ({
 })
 
 export default {
-  external: ["tizen", pdfJs, pdfJsWorker, "webapis"],
+  external: ["tizen", pdfJsWorker, "webapis"],
   input: "src/index.js",
   output: {
     file: "build/bundle.js",
@@ -98,7 +98,7 @@ export default {
     name: "app",
     globals: {
       [pdfJsWorker]: "PdfjsWorker",
-      [pdfJs]: "Pdfjs",
+      // [pdfJs]: "Pdfjs",
       "tizen": "tizen",
       "webapis": "webapis"
     }

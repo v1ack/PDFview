@@ -2,7 +2,7 @@
   /* global tizen */
   import {onMount} from "svelte"
   import InViewSettings from "../components/InViewSettings.svelte"
-  import {bezelActions, bezelActionsButtons, isDev, supportBezel, theme} from "../constants"
+  import {bezelActions, bezelActionsButtons, isDev, theme} from "../constants"
   import {configStore} from "../store"
   import {Remarkable} from "remarkable"
   import {bezelEventScroll, getExtension} from "../utils"
@@ -98,7 +98,7 @@
   {@html md ? markdown.render(text) : text}
 </div>
 <InViewSettings>
-  {#if supportBezel}
+  {#if $configStore.supportBezel}
     <InViewSettingsBlock
       bind:current={txtAction}
       {buttons}
@@ -112,7 +112,7 @@
     title="Theme"
   />
 </InViewSettings>
-{#if !supportBezel}
+{#if $configStore.zoomButtons}
   <div class="buttons-block bottom">
     <button on:click={scaleDown} style="text-align: right;">-</button>
     <button on:click={scaleUp} style="text-align: left;">+</button>

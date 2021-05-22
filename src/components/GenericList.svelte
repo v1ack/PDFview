@@ -1,5 +1,4 @@
 <script>
-  import {slide} from "svelte/transition"
   import {createEventDispatcher} from "svelte"
   import {scrollTo} from "../utils"
 
@@ -67,11 +66,6 @@
       scrollTo(containerNode, 0, itemHeight * chosen)
     }
   }
-
-  function setAnimation(node) {
-    let width = node.offsetWidth
-    if (width + 20 > 360) node.classList.add("animated")
-  }
 </script>
 
 <svelte:window on:rotarydetent={bezelRotate} />
@@ -95,14 +89,7 @@
       class="item"
       style="height: {itemHeight}px;"
     >
-      <div class="title">
-        <span use:setAnimation>{item.title ? item.title : item}</span>
-      </div>
-      {#if chosen === i && item.subtitle}
-        <div class="subtitle" transition:slide={{duration: 500}}>
-          {item.subtitle}
-        </div>
-      {/if}
+      <slot {item} active={chosen === i} />
     </div>
   {/each}
   <div class="fake-item" style="height: {itemHeight}px;" />

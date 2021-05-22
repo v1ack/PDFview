@@ -7,6 +7,7 @@ import MainScreen from "./pages/MainScreen.svelte"
 import Message from "./pages/Message.svelte"
 import FileReceive from "./pages/FileReceive.svelte"
 import TxtView from "./pages/TxtView.svelte"
+import Settings from "./pages/Settings.svelte"
 
 export const routes = {
   [pages.filesList]: FilesList,
@@ -17,4 +18,5 @@ export const routes = {
   [pages.message]: Message,
   [pages.fileReceive]: FileReceive,
   [pages.txtView]: TxtView,
+  [pages.settings]: Settings,
 }

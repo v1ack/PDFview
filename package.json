@@ -28,7 +28,7 @@
     "@rollup/plugin-node-resolve": "^11.2.1",
     "core-js": "^3.11.0",
     "fs-extra": "^9.1.0",
-    "pdfjs-dist": "^2.7.570",
+    "pdfjs-dist": "2.5.207",
     "prettier": "^2.2.1",
     "prettier-plugin-svelte": "^2.2.0",
     "remarkable": "^2.0.1",
