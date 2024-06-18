@@ -1,7 +1,4 @@
 # Docs View
-Tizen web app for opening `pdf`, `txt` and `md`
+Tizen web app for opening `pdf`, `txt` and `md` directly on watch
 
-Website with description [https://v1ack.github.io/pdfview/](https://v1ack.github.io/pdfview/)
-
-
-
+More info [https://v1ack.github.io/projects/docsView](https://v1ack.github.io/projects/docsView)
